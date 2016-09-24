@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+  <script src="https://code.createjs.com/preloadjs-0.6.2.min.js"></script>
+  <script src="javascripts/collision.js"></script>
+  <script src="javascripts/preloader.js"></script>
+  <script src="javascripts/levels.js"></script>
+  <script src="javascripts/layer.js"></script>
+  <script src="javascripts/bullet.js"></script>
+  <script src="javascripts/explosion.js"></script>
+  <script src="javascripts/weapon.js"></script>
+  <script src="javascripts/player.js"></script>
+  <script src="javascripts/enemies/orb_enemy.js"></script>
+  <script src="javascripts/enemy.js"></script>
+  <script src="javascripts/enemy_group.js"></script>
+  <script src="javascripts/level.js"></script>
+  <script src="javascripts/game.js"></script>
+  <link rel="stylesheet" href="stylesheets/main.css" />
+</head>
+
+<div id="wrapper">
+  <canvas id="background-canvas" width="600" height="400"></canvas>
+  <canvas id="main-canvas" width="600" height="400"></canvas>
+</div>
+
+<script>
+var game = new Game();
+var preloader = new Preloader();
+</script>
