@@ -12,7 +12,6 @@ var Weapon = function (entity, slot, isPlayerWeapon) {
     } else {
       var bullet = new EnemyBullet(this.level, this.object.x, this.object.y);
     }
-    console.log(this.slot.y);
   }
 
   this.update = function (playerX, playerY) {
@@ -20,10 +19,3 @@ var Weapon = function (entity, slot, isPlayerWeapon) {
     this.object.y = playerY + this.slot.y;
   }
 }
-
-
-// player Y = 100
-// weapon Y = 80
-// Player moves
-// player Y = 50
-// weapon Y = 30
