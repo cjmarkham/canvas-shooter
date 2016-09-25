@@ -32,7 +32,16 @@ var Preloader = function () {
     },
   ]);
 
+  this.queue.on('progress', function (progress) {
+    var percentage = Math.floor(progress.progress * 100).toString();
+    console.log(percentage)
+    $('#loading #progress-bar').css({
+      width: percentage + '%'
+    });
+  })
+
   this.queue.on('complete', function () {
+    $('#loading').fadeOut(10);
     game.init();
   });
 

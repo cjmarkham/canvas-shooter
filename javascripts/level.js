@@ -18,6 +18,7 @@ var Level = function (levelNumber) {
     this.createEnemyGroups();
 
     this.levelTimerInterval = setInterval(function () {
+      // used for enemy spawn timing
       this.levelTimer += 0.5;
       // document.getElementById('timer').innerText = this.levelTimer;
     }.bind(this), 500);
