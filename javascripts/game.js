@@ -7,7 +7,39 @@ var Game = function () {
   this.player;
   this.ticks = 0;
   this.score = 0;
-  this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1
+  this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1;
+  this.cells = [];
+  this.grid = new createjs.Container();
+
+  this.createGrid = function () {
+    this.cellWidth = this.width / 10;
+    this.cellHeight = this.height / 10;
+    var rows = this.height / this.cellHeight;
+    var columns = this.width / this.cellWidth;
+
+    var x;
+    var y;
+    for (x = 0; x < rows; ++x) {
+      for (y = 0; y < columns; ++y) {
+        var graphics = new createjs.Graphics().beginStroke('red').drawRect(y * this.cellWidth, x * this.cellHeight, this.cellWidth, this.cellHeight);
+        var shape = new createjs.Shape(graphics);
+
+        this.stage.addChild(shape);
+        var cell = {
+          id: this.cells.length,
+          x: y * this.cellWidth,
+          y: x * this.cellHeight,
+          w: this.cellWidth,
+          h: this.cellHeight,
+        }
+        var text = new createjs.Text(this.cells.length, '20px Arial', '#ffffff');
+        text.x = cell.x;
+        text.y = cell.y;
+        this.stage.addChild(text)
+        this.cells.push(cell);
+      }
+    }
+  }
 
   this.init = function () {
     this.canvas = document.getElementById('main-canvas');
@@ -16,6 +48,7 @@ var Game = function () {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.stage = new createjs.Stage(this.canvas);
+    this.createGrid();
 
     this.player = new Player();
 

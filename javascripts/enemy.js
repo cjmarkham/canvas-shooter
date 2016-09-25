@@ -11,21 +11,41 @@ var Enemy = function (group, data) {
   this.object.y = data.y;
   this.group = group;
   this.angle = this.angle * Math.PI / 180;
-  // TODO: remove Object.assign
   this.shootingInterval = Math.random() * 20;
+  this.currentCell;
 
   this.update = function () {
+    var currentCell = game.cells.find(function (cell) {
+      var x = cell.x;
+      var maxX = cell.x + cell.w;
+      var y = cell.y;
+      var maxY = cell.y + cell.h;
+
+      if (this.object.x >= x && this.object.x <= maxX && this.object.y >= y && this.object.y <= maxY) {
+        return cell;
+      }
+    }.bind(this));
 
     // If this enemy will change direction when spawned
-    if (this.willChangeDirection) {
+    if (this.willChangeDirection && currentCell) {
       var i;
       for (i = 0; i < this.directionChanges.length; ++i) {
         var newDirection = this.directionChanges[i];
 
-        // If the change at time is the same as the level time
-        // set the new angle
-        if (newDirection.changeAt === game.level.levelTimer) {
-          this.angle = newDirection.angle * Math.PI / 180;
+        if (newDirection.whenInCell === currentCell.id) {
+          var cellToMoveTo = game.cells[newDirection.gotoCell];
+          var targetX = cellToMoveTo.x + (cellToMoveTo.x + cellToMoveTo.w);
+          var targetY = cellToMoveTo.y + (cellToMoveTo.y + cellToMoveTo.h);
+
+          var originX = currentCell.x + (currentCell.x + currentCell.w);
+          var originY = currentCell.y + (currentCell.y + currentCell.h);
+
+          var angle =  Math.atan2(targetY - originY, targetX - originX);
+          this.angle = angle;
+        }
+
+        if (currentCell.id === newDirection.gotoCell) {
+          this.angle = Math.PI;
         }
       }
     }
@@ -50,6 +70,11 @@ var Enemy = function (group, data) {
       this.destroy();
       return;
     }
+  }
+
+  this.gotoCell = function (cellIndex) {
+    var cell = game.cells[cellIndex];
+
   }
 
   this.shoot = function () {
