@@ -8,8 +8,8 @@ var OrbEnemy = function (x, y) {
 
   this.weaponSlots = [
     {
-      x: x + 50,
-      y: y,
+      x: 50,
+      y: 0,
       level: 1,
     }
   ];

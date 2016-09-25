@@ -24,18 +24,18 @@ var Player = function () {
   this.weaponSlots = [
     [
       {
-        x: this.object.x + 50,
-        y: this.object.y,
+        x: 50,
+        y: 0,
       }
     ],
     [
       {
-        x: this.object.x,
-        y: this.object.y - 10,
+        x: 0,
+        y: -10,
       },
       {
-        x: this.object.x,
-        y: this.object.y + 10,
+        x: 0,
+        y: 10,
       }
     ]
   ];
@@ -49,7 +49,7 @@ var Player = function () {
       var j;
       for (j = 0; j < weaponSlot.length; ++j) {
         var slot = weaponSlot[j];
-        var weapon = new Weapon(this.level, slot, true);
+        var weapon = new Weapon(this, slot, true);
         this.weapons.push(weapon);
       }
     }

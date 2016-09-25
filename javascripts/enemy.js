@@ -41,7 +41,7 @@ var Enemy = function (group, data) {
     var i;
     for (i = 0; i < this.attributes.weaponSlots.length; ++i) {
       var slot = this.attributes.weaponSlots[i];
-      var weapon = new Weapon(slot.level, slot, false);
+      var weapon = new Weapon(Object.assign({}, this, {level: slot.level}), slot, false);
       this.weapons.push(weapon);
     }
   }
