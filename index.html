@@ -4,22 +4,6 @@
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
   <script src="https://code.createjs.com/preloadjs-0.6.2.min.js"></script>
-  <script src="javascripts/utils.js"></script>
-  <script src="javascripts/collision.js"></script>
-  <script src="javascripts/preloader.js"></script>
-  <script src="javascripts/levels.js"></script>
-  <script src="javascripts/layer.js"></script>
-  <script src="javascripts/enemy_bullet.js"></script>
-  <script src="javascripts/player_bullet.js"></script>
-  <script src="javascripts/explosion.js"></script>
-  <script src="javascripts/weapon.js"></script>
-  <script src="javascripts/player.js"></script>
-  <script src="javascripts/enemies/orb_enemy.js"></script>
-  <script src="javascripts/enemy.js"></script>
-  <script src="javascripts/enemy_group.js"></script>
-  <script src="javascripts/powerup.js"></script>
-  <script src="javascripts/level.js"></script>
-  <script src="javascripts/game.js"></script>
   <link rel="stylesheet" href="stylesheets/main.css" />
 </head>
 
@@ -30,9 +14,26 @@
   </div>
 </div>
 <div id="score">00000000</div>
+<div id="timer">0</div>
 <canvas id="background-canvas" width="600" height="400"></canvas>
 <canvas id="main-canvas" width="600" height="400"></canvas>
 
+<script src="javascripts/utils.js"></script>
+<script src="javascripts/collision.js"></script>
+<script src="javascripts/preloader.js"></script>
+<script src="javascripts/levels.js"></script>
+<script src="javascripts/layer.js"></script>
+<script src="javascripts/enemy_bullet.js"></script>
+<script src="javascripts/player_bullet.js"></script>
+<script src="javascripts/explosion.js"></script>
+<script src="javascripts/weapon.js"></script>
+<script src="javascripts/player.js"></script>
+<script src="javascripts/enemies/orb_enemy.js"></script>
+<script src="javascripts/enemy.js"></script>
+<script src="javascripts/enemy_group.js"></script>
+<script src="javascripts/powerup.js"></script>
+<script src="javascripts/level.js"></script>
+<script src="javascripts/game.js"></script>
 <script>
 var game = new Game();
 var preloader = new Preloader();
