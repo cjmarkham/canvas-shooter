@@ -4,12 +4,11 @@ var Enemy = function (group, data) {
   for (i = 0; i < keys.length; ++i) {
     this[keys[i]] = data[keys[i]];
   }
-  this.x = game.width;
-  this.attributes = new OrbEnemy(this.x, this.y);
+  this.attributes = new OrbEnemy(data.x, data.y);
 
   this.object = new createjs.Bitmap(preloader.get(this.attributes.sprite));
-  this.object.x = this.x;
-  this.object.y = this.y;
+  this.object.x = data.x;
+  this.object.y = data.y;
   this.group = group;
   this.angle = this.angle * Math.PI / 180;
   this.weapons = [];
