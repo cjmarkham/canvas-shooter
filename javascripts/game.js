@@ -6,6 +6,7 @@ var Game = function () {
   this.paused = false;
   this.player;
   this.ticks = 0;
+  this.score = 0;
 
   this.init = function () {
     this.canvas = document.getElementById('main-canvas');
@@ -19,7 +20,8 @@ var Game = function () {
 
     this.playerLayer = new Layer();
     this.enemiesLayer = new Layer();
-    this.bulletLayer = new Layer();
+    this.playerBulletLayer = new Layer();
+    this.enemyBulletLayer = new Layer();
     this.explosionLayer = new Layer();
 
     this.playerLayer.addChild(this.player);
@@ -32,7 +34,8 @@ var Game = function () {
     this.stage.addChild(
       this.playerLayer.container,
       this.enemiesLayer.container,
-      this.bulletLayer.container,
+      this.playerBulletLayer.container,
+      this.enemyBulletLayer.container,
       this.explosionLayer.container
     );
 
@@ -94,9 +97,16 @@ var Game = function () {
       return;
     }
 
+    this.ticks++;
+
     this.player.update();
     this.level.update();
     this.stage.update();
     this.enemiesLayer.update();
+  }
+
+  this.updateScore = function (number) {
+    this.score += number;
+    document.getElementById('score').innerText = Utils.pad(this.score, 8);
   }
 };

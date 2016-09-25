@@ -3,11 +3,13 @@
   <meta charset="utf-8" />
   <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
   <script src="https://code.createjs.com/preloadjs-0.6.2.min.js"></script>
+  <script src="javascripts/utils.js"></script>
   <script src="javascripts/collision.js"></script>
   <script src="javascripts/preloader.js"></script>
   <script src="javascripts/levels.js"></script>
   <script src="javascripts/layer.js"></script>
-  <script src="javascripts/bullet.js"></script>
+  <script src="javascripts/enemy_bullet.js"></script>
+  <script src="javascripts/player_bullet.js"></script>
   <script src="javascripts/explosion.js"></script>
   <script src="javascripts/weapon.js"></script>
   <script src="javascripts/player.js"></script>
@@ -20,6 +22,7 @@
 </head>
 
 <div id="wrapper">
+  <div id="score">00000000</div>
   <canvas id="background-canvas" width="600" height="400"></canvas>
   <canvas id="main-canvas" width="600" height="400"></canvas>
 </div>

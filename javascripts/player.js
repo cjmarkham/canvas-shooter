@@ -9,7 +9,7 @@ var Player = function () {
   this.object.scaleY = 1;
   this.object.x = 20;
   this.object.y = ((game.height / 2) - (this.image.image.height / 2));
-  this.hp = 40;
+  this.hp = 1;
   this.moving = {
     left: false,
     right: false,
@@ -19,6 +19,7 @@ var Player = function () {
   this.fireHeld = false;
   this.lastTimeFired = 0;
   this.level = 1;
+  this.controllable = true;
   this.weapons = [];
   this.weaponSlots = [
     [
@@ -38,6 +39,7 @@ var Player = function () {
       }
     ]
   ];
+  this.respawning = false;
 
   this.setWeapons = function () {
     this.weapons = [];
@@ -47,7 +49,7 @@ var Player = function () {
       var j;
       for (j = 0; j < weaponSlot.length; ++j) {
         var slot = weaponSlot[j];
-        var weapon = new Weapon(this.level, slot.x, slot.y);
+        var weapon = new Weapon(this.level, slot, true);
         this.weapons.push(weapon);
       }
     }
@@ -82,59 +84,73 @@ var Player = function () {
   }
 
   this.takeDamage = function (damage) {
-    this.hp -= damage;
+    // this.hp -= damage;
     this.setLevel(1);
-    new Explosion(this.object.x, this.object.y);
+
+    // if (this.hp <= 0) {
+      this.kill();
+    // }
   }
 
   this.kill = function () {
-
+    this.controllable = false;
+    this.object.x = -150;
+    setTimeout(function () {
+      this.respawning = true;
+    }.bind(this), 1000);
   }
 
   this.update = function () {
-    if (this.moving.left) {
-      this.object.x -= 10;
-    } else if (this.moving.right) {
-      this.object.x += 10;
+    if (this.respawning) {
+      this.image.alpha = (game.ticks % 4 === 0) ? 1 : 0;
+      this.object.x += 5;
+      this.object.y = (game.height / 2) - (this.image.image.height / 2);
+
+      if (this.object.x >= 100) {
+        this.image.alpha = 1;
+        this.respawning = false
+        this.controllable = true;
+        // this.hp = 1;
+      }
     }
 
-    if (this.moving.up) {
-      this.object.y -= 10;
-    } else if (this.moving.down) {
-      this.object.y += 10;
-    }
+    if (this.controllable) {
+      if (this.moving.left) {
+        this.object.x -= 10;
+      } else if (this.moving.right) {
+        this.object.x += 10;
+      }
 
-    if (this.object.x <= 0) {
-      this.object.x = 0;
-    }
+      if (this.moving.up) {
+        this.object.y -= 10;
+      } else if (this.moving.down) {
+        this.object.y += 10;
+      }
 
-    if (this.object.x >= (game.width - this.image.image.width)) {
-      this.object.x = game.width - this.image.image.width;
-    }
+      if (this.object.x <= 0) {
+        console.log('put back')
+        this.object.x = 0;
+      }
 
-    if (this.object.y <= 0) {
-      this.object.y = 0;
-    }
+      if (this.object.x >= (game.width - this.image.image.width)) {
+        this.object.x = game.width - this.image.image.width;
+      }
 
-    if (this.object.y >= (game.height - this.image.image.height)) {
-      this.object.y = game.height - this.image.image.height;
-    }
+      if (this.object.y <= 0) {
+        this.object.y = 0;
+      }
 
-    if (this.fireHeld) {
-      this.shoot();
-    }
+      if (this.object.y >= (game.height - this.image.image.height)) {
+        this.object.y = game.height - this.image.image.height;
+      }
 
-    this.updateBullets();
-    this.updateWeapons();
+      if (this.fireHeld) {
+        this.shoot();
+      }
+
+      this.updateWeapons();
+    }
   }
-
-  this.updateBullets = function () {
-    var i;
-    for (i = 0; i < game.bulletLayer.entities.length; ++i) {
-      var bullet = game.bulletLayer.entities[i];
-      bullet.update();
-    }
-  };
 
   this.updateWeapons = function () {
     var i;

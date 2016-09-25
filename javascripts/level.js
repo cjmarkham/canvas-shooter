@@ -71,6 +71,21 @@ var Level = function (levelNumber) {
     this.updateBackground();
     this.updateExplosions();
     this.checkCollisions();
+    this.updateBullets();
+  }
+
+  this.updateBullets = function () {
+    var i;
+    for (i = 0; i < game.playerBulletLayer.entities.length; ++i) {
+      var bullet = game.playerBulletLayer.entities[i];
+      bullet.update();
+    }
+
+    var j;
+    for (j = 0; j < game.enemyBulletLayer.entities.length; ++j) {
+      var bullet = game.enemyBulletLayer.entities[j];
+      bullet.update();
+    }
   }
 
   this.initBackground = function () {
@@ -109,26 +124,45 @@ var Level = function (levelNumber) {
   }
 
   this.checkCollisions = function () {
+    // check enemy collisions with the player
     var i;
     for (i = 0; i < game.enemiesLayer.entities.length; ++i) {
       var enemy = game.enemiesLayer.entities[i];
 
-      if (ndgmr.checkPixelCollision(enemy.object, game.player.image)) {
-        game.player.takeDamage();
-        enemy.kill();
+      if ( ! game.player.respawning) {
+        if (ndgmr.checkPixelCollision(enemy.object, game.player.image)) {
+          new Explosion(enemy.object.x, enemy.object.y);
+          game.player.takeDamage();
+          enemy.kill();
+        }
       }
 
-
+      // check player bullet collisions with the enemy
       var j;
-      for (j = 0; j < game.bulletLayer.entities.length; ++j) {
-        var bullet = game.bulletLayer.entities[i];
+      for (j = 0; j < game.playerBulletLayer.entities.length; ++j) {
+        var bullet = game.playerBulletLayer.entities[j];
 
         if (bullet.x > game.width) {
           continue;
         }
 
         if (ndgmr.checkPixelCollision(bullet.object, enemy.object)) {
+          new Explosion(enemy.object.x, enemy.object.y);
           enemy.kill();
+          bullet.kill();
+        }
+      }
+    }
+
+    // check enemy bullet collisions with the player
+    var k;
+    for (j = 0; j < game.enemyBulletLayer.entities.length; ++j) {
+      var bullet = game.enemyBulletLayer.entities[j];
+
+      if ( ! game.player.respawning) {
+        if (ndgmr.checkPixelCollision(bullet.object, game.player.image)) {
+          new Explosion(game.player.object.x, game.player.object.y);
+          game.player.takeDamage(10);
           bullet.kill();
         }
       }

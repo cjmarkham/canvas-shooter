@@ -8,11 +8,15 @@ var Preloader = function () {
     },
     {
       id: 'bullet1',
-      src: 'images/sprites/bullet.png',
+      src: 'images/sprites/bullet1.png',
     },
     {
       id: 'bullet2',
       src: 'images/sprites/bullet2.png',
+    },
+    {
+      id: 'enemyBullet1',
+      src: 'images/sprites/enemyBullet1.png',
     },
     {
       id: 'orb',
