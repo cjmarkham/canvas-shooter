@@ -109,7 +109,6 @@ var Player = function () {
       }
 
       if (this.orbs.length) {
-        console.log(this.orbs.length);
         var j;
         for (j = 0; j < this.orbs.length; ++j) {
           var orb = this.orbs[j];
@@ -131,6 +130,7 @@ var Player = function () {
   }
 
   this.kill = function () {
+    this.setLevel(1);
     this.controllable = false;
     this.object.x = -150;
     setTimeout(function () {
@@ -166,7 +166,6 @@ var Player = function () {
       }
 
       if (this.object.x <= 0) {
-        console.log('put back')
         this.object.x = 0;
       }
 
