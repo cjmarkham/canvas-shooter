@@ -24,6 +24,7 @@ var Game = function () {
     this.enemyBulletLayer = new Layer();
     this.explosionLayer = new Layer();
     this.powerupsLayer = new Layer();
+    this.orbsLayer = new Layer();
 
     this.playerLayer.addChild(this.player);
 
@@ -38,6 +39,7 @@ var Game = function () {
       this.playerBulletLayer.container,
       this.enemyBulletLayer.container,
       this.powerupsLayer.container,
+      this.orbsLayer.container,
       this.explosionLayer.container
     );
 

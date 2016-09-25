@@ -20,6 +20,7 @@ var Player = function () {
   this.lastTimeFired = 0;
   this.level = 1;
   this.controllable = true;
+  this.orbs = [];
   this.weapons = [];
   this.weaponSlots = [
     [
@@ -67,8 +68,21 @@ var Player = function () {
       this.level = MAX_LEVEL;
     }
 
-    this.setWeapons();
+    if (this.level === 3) {
+      this.addOrb();
+    } else {
+      this.setWeapons();
+    }
   }
+
+  this.addOrb = function () {
+    if (this.orbs.length === 1) {
+      return;
+    }
+
+    var orb = new Orb(this.object.x, this.object.y);
+    this.orbs.push(orb);
+  };
 
   this.shoot = function () {
     // Check if we can fire
@@ -77,6 +91,15 @@ var Player = function () {
       for (i = 0; i < this.weapons.length; ++i) {
         var weapon = this.weapons[i];
         weapon.shoot();
+      }
+
+      if (this.orbs.length) {
+        console.log(this.orbs.length);
+        var j;
+        for (j = 0; j < this.orbs.length; ++j) {
+          var orb = this.orbs[j];
+          orb.shoot();
+        }
       }
 
       this.lastTimeFired = new Date().getTime();
@@ -149,6 +172,15 @@ var Player = function () {
       }
 
       this.updateWeapons();
+      this.updateOrbs();
+    }
+  }
+
+  this.updateOrbs = function () {
+    var i;
+    for (i = 0; i < this.orbs.length; ++i) {
+      var orb = this.orbs[i];
+      orb.update();
     }
   }
 

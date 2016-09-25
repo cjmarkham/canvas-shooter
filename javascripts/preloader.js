@@ -30,6 +30,10 @@ var Preloader = function () {
       id: 'powerup1',
       src: 'images/sprites/powerup1.png',
     },
+    {
+      id: 'orb',
+      src: 'images/sprites/orb.png',
+    },
   ]);
 
   this.queue.on('progress', function (progress) {

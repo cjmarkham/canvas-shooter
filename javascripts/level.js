@@ -168,18 +168,41 @@ var Level = function (levelNumber) {
           bullet.kill();
         }
       }
+
+      // Check enemy collisions with player orbs
+      var m;
+      for (m = 0; m < game.player.orbs.length; ++m) {
+        var orb = game.player.orbs[m];
+
+        if (ndgmr.checkPixelCollision(enemy.object, orb.object)) {
+          new Explosion(orb.object.x, orb.object.y);
+          orb.kill();
+          enemy.kill();
+        }
+      }
     }
 
     // check enemy bullet collisions with the player
     var k;
-    for (j = 0; j < game.enemyBulletLayer.entities.length; ++j) {
-      var bullet = game.enemyBulletLayer.entities[j];
+    for (k = 0; k < game.enemyBulletLayer.entities.length; ++k) {
+      var bullet = game.enemyBulletLayer.entities[k];
 
       if ( ! game.player.respawning) {
         if (ndgmr.checkPixelCollision(bullet.object, game.player.image)) {
           new Explosion(game.player.object.x, game.player.object.y);
           game.player.takeDamage(10);
           bullet.kill();
+        }
+      }
+
+      // check enemy bullet collisions with player orbs
+      var l;
+      for (l = 0; l < game.player.orbs.length; ++l) {
+        var orb = game.player.orbs[l];
+
+        if (ndgmr.checkPixelCollision(bullet.object, orb.object)) {
+          new Explosion(orb.object.x, orb.object.y);
+          orb.kill();
         }
       }
     }

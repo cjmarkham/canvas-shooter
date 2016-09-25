@@ -41,22 +41,14 @@ html, body {
   height: 100%;
 }
 
-#timer {
+#debug {
   position: absolute;
-  top: 30px;
-  left: 10px;
+  top: 0;
+  right: 10px;
   color: #fff;
   font-size: 24px;
   z-index: 20;
-}
-
-#fps {
-  position: absolute;
-  top: 50px;
-  left: 10px;
-  color: #fff;
-  font-size: 24px;
-  z-index: 20;
+  text-align: right;
 }
 
 #progress {
