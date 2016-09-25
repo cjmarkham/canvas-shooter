@@ -20,7 +20,9 @@ var Level = function (levelNumber) {
     this.levelTimerInterval = setInterval(function () {
       // used for enemy spawn timing
       this.levelTimer += 0.5;
-      $('#timer').text(this.levelTimer);
+      if (game.debugMode) {
+        $('#timer span').text(this.levelTimer);
+      }
     }.bind(this), 500);
   }
 
@@ -30,10 +32,17 @@ var Level = function (levelNumber) {
 
   this.createEnemyGroups = function () {
     var i;
+    var totalEnemies = 0;
     for (i = 0; i < this.enemyGroupsData.length; ++i) {
       var enemyGroupData = this.enemyGroupsData[i];
       var group = new EnemyGroup(enemyGroupData);
       this.enemyGroups.push(group);
+
+      totalEnemies += group.enemies.length;
+    }
+
+    if (game.debugMode) {
+      $('#enemies span').text(totalEnemies);
     }
   }
 
@@ -169,14 +178,11 @@ var Level = function (levelNumber) {
         }
       }
 
-      // Check enemy collisions with player orbs
-      var m;
-      for (m = 0; m < game.player.orbs.length; ++m) {
-        var orb = game.player.orbs[m];
-
-        if (ndgmr.checkPixelCollision(enemy.object, orb.object)) {
-          new Explosion(orb.object.x, orb.object.y);
-          orb.kill();
+      if (game.player.orb) {
+        // Check enemy collisions with player orbs
+        if (ndgmr.checkPixelCollision(enemy.object, game.player.orb.object)) {
+          new Explosion(game.player.orb.object.x, game.player.orb.object.y);
+          game.player.orb.kill();
           enemy.kill();
         }
       }
@@ -196,13 +202,10 @@ var Level = function (levelNumber) {
       }
 
       // check enemy bullet collisions with player orbs
-      var l;
-      for (l = 0; l < game.player.orbs.length; ++l) {
-        var orb = game.player.orbs[l];
-
-        if (ndgmr.checkPixelCollision(bullet.object, orb.object)) {
-          new Explosion(orb.object.x, orb.object.y);
-          orb.kill();
+      if (game.player.orb) {
+        if (ndgmr.checkPixelCollision(bullet.object, game.player.orb.object)) {
+          new Explosion(game.player.orb.object.x, game.player.orb.object.y);
+          game.player.orb.kill();
         }
       }
     }

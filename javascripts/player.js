@@ -1,6 +1,6 @@
 var Player = function () {
 
-  MAX_LEVEL = 2;
+  MAX_LEVEL = 5;
 
   this.object = new createjs.Bitmap(preloader.get('playerPlane'));
 
@@ -35,45 +35,12 @@ var Player = function () {
   this.lastTimeFired = 0;
   this.level = 1;
   this.controllable = true;
-  this.orbs = [];
-  this.weapons = [];
-  this.weaponSlots = [
-    [
-      {
-        x: 50,
-        y: 0,
-      }
-    ],
-    [
-      {
-        x: 0,
-        y: -10,
-      },
-      {
-        x: 0,
-        y: 10,
-      }
-    ]
-  ];
+  this.orb = undefined;
+  this.weapon = new Weapon(this, true);
   this.respawning = false;
-
-  this.setWeapons = function () {
-    this.weapons = [];
-    var i;
-    for (i = 0; i < this.weaponSlots[this.level - 1].length; ++i) {
-      var weaponSlot = this.weaponSlots[this.level - 1];
-      var j;
-      for (j = 0; j < weaponSlot.length; ++j) {
-        var slot = weaponSlot[j];
-        var weapon = new Weapon(this, slot, true);
-        this.weapons.push(weapon);
-      }
-    }
-  }
 
   this.setLevel = function (level) {
     this.level = level;
-    this.setWeapons();
   }
 
   this.levelUp = function () {
@@ -85,35 +52,26 @@ var Player = function () {
 
     if (this.level === 3) {
       this.addOrb();
-    } else {
-      this.setWeapons();
     }
+
+    this.weapon = new Weapon(this, true);
   }
 
   this.addOrb = function () {
-    if (this.orbs.length === 1) {
+    if (this.orb) {
       return;
     }
 
-    var orb = new Orb(this.object.x, this.object.y);
-    this.orbs.push(orb);
+    this.orb = new Orb(this.object.x, this.object.y);
   };
 
   this.shoot = function () {
     // Check if we can fire
     if (this.lastTimeFired < new Date().getTime() - 150) {
-      var i;
-      for (i = 0; i < this.weapons.length; ++i) {
-        var weapon = this.weapons[i];
-        weapon.shoot();
-      }
+      this.weapon.shoot();
 
-      if (this.orbs.length) {
-        var j;
-        for (j = 0; j < this.orbs.length; ++j) {
-          var orb = this.orbs[j];
-          orb.shoot();
-        }
+      if (this.orb) {
+        this.orb.shoot();
       }
 
       this.lastTimeFired = new Date().getTime();
@@ -185,26 +143,10 @@ var Player = function () {
         this.shoot();
       }
 
-      this.updateWeapons();
-      this.updateOrbs();
+      if (this.orb) {
+        this.orb.update();
+      }
+      this.weapon.update(this.object.x, this.object.y);
     }
   }
-
-  this.updateOrbs = function () {
-    var i;
-    for (i = 0; i < this.orbs.length; ++i) {
-      var orb = this.orbs[i];
-      orb.update();
-    }
-  }
-
-  this.updateWeapons = function () {
-    var i;
-    for (i = 0; i < this.weapons.length; ++i) {
-      var weapon = this.weapons[i];
-      weapon.update(this.object.x, this.object.y);
-    }
-  }
-
-  this.setWeapons();
 };

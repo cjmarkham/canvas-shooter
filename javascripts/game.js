@@ -7,6 +7,7 @@ var Game = function () {
   this.player;
   this.ticks = 0;
   this.score = 0;
+  this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1
 
   this.init = function () {
     this.canvas = document.getElementById('main-canvas');
@@ -108,7 +109,7 @@ var Game = function () {
     this.stage.update();
     this.enemiesLayer.update();
 
-    $('#fps').text(Math.floor(createjs.Ticker.getMeasuredFPS()));
+    $('#fps span').text(Math.floor(createjs.Ticker.getMeasuredFPS()));
   }
 
   this.updateScore = function (number) {

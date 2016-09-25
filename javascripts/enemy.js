@@ -11,7 +11,8 @@ var Enemy = function (group, data) {
   this.object.y = data.y;
   this.group = group;
   this.angle = this.angle * Math.PI / 180;
-  this.weapons = [];
+  // TODO: remove Object.assign
+  this.weapon = new Weapon(Object.assign({}, this, {level: this.attributes.level}), false);
   this.shootingInterval = Math.random() * 20;
 
   this.update = function () {
@@ -44,26 +45,11 @@ var Enemy = function (group, data) {
       return;
     }
 
-    this.updateWeapons();
+    this.weapon.update(this.object.x, this.object.y);
   }
-
-  this.setWeapons = function () {
-    this.weapons = [];
-    var i;
-    for (i = 0; i < this.attributes.weaponSlots.length; ++i) {
-      var slot = this.attributes.weaponSlots[i];
-      var weapon = new Weapon(Object.assign({}, this, {level: slot.level}), slot, false);
-      this.weapons.push(weapon);
-    }
-  }
-  this.setWeapons();
 
   this.shoot = function () {
-    var i;
-    for (i = 0; i < this.weapons.length; ++i) {
-      var weapon = this.weapons[i];
-      weapon.shoot();
-    }
+    this.weapon.shoot();
   }
 
   this.takeDamage = function () {
@@ -109,14 +95,10 @@ var Enemy = function (group, data) {
 
   this.destroy = function () {
     game.enemiesLayer.removeChild(this);
-    // console.log(this.group.enemies.length);
-  }
 
-  this.updateWeapons = function () {
-    var i;
-    for (i = 0; i < this.weapons.length; ++i) {
-      var weapon = this.weapons[i];
-      weapon.update(this.object.x, this.object.y);
+    if (game.debugMode) {
+      var count = parseInt($('#enemies span').text(), 10);
+      $('#enemies span').text(count - 1);
     }
   }
 }

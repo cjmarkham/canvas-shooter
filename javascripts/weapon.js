@@ -1,10 +1,13 @@
-var Weapon = function (entity, slot, isPlayerWeapon) {
+var Weapon = function (entity, isPlayerWeapon) {
   this.object = new createjs.Container();
-  this.object.x = entity.object.x + slot.x;
-  this.object.y = entity.object.y + slot.y;
+  this.object.x = entity.object.x;
+  this.object.y = entity.object.y;
   this.level = entity.level;
   this.isPlayerWeapon = isPlayerWeapon || false;
-  this.slot = slot;
+
+  // if (!isPlayerWeapon) {
+  //   console.log(entity.object.x, entity.object.y);
+  // }
 
   this.shoot = function () {
     if (this.isPlayerWeapon) {
@@ -16,6 +19,6 @@ var Weapon = function (entity, slot, isPlayerWeapon) {
 
   this.update = function (playerX, playerY) {
     this.object.x = playerX;
-    this.object.y = playerY + this.slot.y;
+    this.object.y = playerY;
   }
 }
