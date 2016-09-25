@@ -24,7 +24,7 @@ var Player = function () {
 
   this.object.scaleX = .3;
   this.object.scaleY = .3;
-  this.object.x = 20;
+  this.object.x = this.width / 2;
   this.object.y = ((game.height / 2) - (this.height / 2));
   this.hp = 1;
   this.moving = {
@@ -124,20 +124,20 @@ var Player = function () {
         this.object.gotoAndPlay('down');
       }
 
-      if (this.object.x <= 0) {
-        this.object.x = 0;
+      if (this.object.x <= this.width / 2) {
+        this.object.x = this.width / 2;
       }
 
       if (this.object.x >= (game.width - this.width)) {
         this.object.x = game.width - this.width;
       }
 
-      if (this.object.y <= 0) {
-        this.object.y = 0;
+      if (this.object.y <= this.height / 2) {
+        this.object.y = this.height / 2;
       }
 
-      if (this.object.y >= (game.height - this.height)) {
-        this.object.y = game.height - this.height;
+      if (this.object.y >= game.height - (this.height / 2)) {
+        this.object.y = game.height - (this.height / 2);
       }
 
       if (this.fireHeld) {
