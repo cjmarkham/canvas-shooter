@@ -4,7 +4,21 @@ var Player = function () {
 
   this.object = new createjs.Bitmap(preloader.get('playerPlane'));
 
+  // var spritesheet = new createjs.SpriteSheet({
+  //   images: [preloader.get('explosion')],
+  //   frames: {
+  //     width: 128,
+  //     height: 128,
+  //     regX: 64,
+  //     regY: 64,
+  //     count: 72,
+  //   },
+  //   animations: {
+  //     explode: [0, 71, false, 1],
+  //   },
+  // });
 
+  // this.object = new createjs.Sprite(spritesheet, 'explode');
 
   this.object.scaleX = 1;
   this.object.scaleY = 1;
@@ -126,12 +140,12 @@ var Player = function () {
 
   this.update = function () {
     if (this.respawning) {
-      this.image.alpha = (game.ticks % 4 === 0) ? 1 : 0;
+      this.object.alpha = (game.ticks % 4 === 0) ? 1 : 0;
       this.object.x += 5;
-      this.object.y = (game.height / 2) - (this.image.image.height / 2);
+      this.object.y = (game.height / 2) - (this.object.image.height / 2);
 
       if (this.object.x >= 100) {
-        this.image.alpha = 1;
+        this.object.alpha = 1;
         this.respawning = false
         this.controllable = true;
         // this.hp = 1;
