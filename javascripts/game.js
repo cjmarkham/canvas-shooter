@@ -105,6 +105,8 @@ var Game = function () {
     this.level.update();
     this.stage.update();
     this.enemiesLayer.update();
+
+    $('#fps').text(Math.floor(createjs.Ticker.getMeasuredFPS()));
   }
 
   this.updateScore = function (number) {
