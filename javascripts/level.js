@@ -20,7 +20,7 @@ var Level = function (levelNumber) {
     this.levelTimerInterval = setInterval(function () {
       // used for enemy spawn timing
       this.levelTimer += 0.5;
-      // document.getElementById('timer').innerText = this.levelTimer;
+      $('#timer').text(this.levelTimer);
     }.bind(this), 500);
   }
 
