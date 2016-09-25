@@ -7,12 +7,41 @@ var Enemy = function (group, data) {
   this.attributes = new OrbEnemy(data.x, data.y);
 
   this.object = new createjs.Bitmap(preloader.get(this.attributes.sprite));
-  this.object.x = data.x;
-  this.object.y = data.y;
   this.group = group;
   this.angle = this.angle * Math.PI / 180;
   this.shootingInterval = Math.random() * 20;
   this.currentCell;
+
+  var cellNumber = data.startingCell;
+  var cell = game.cells[cellNumber];
+  var edgeCells = [9, 19, 29, 39, 49, 59, 69, 79, 89, 99];
+
+  // cell is in the top row
+  // away from screen width edge
+  if (cellNumber <= 8) {
+    // Start in middle X of cell
+    this.object.x = cell.x + (cell.w / 2);
+    // need to remove some Y so the enemy
+    // is off screen
+    this.object.y = cell.y - this.object.image.height;
+  } else if (cellNumber <= 90 && cellNumber >= 90 && edgeCells.indexOf(cellNumber) === -1) {
+    // cell is on bottom row
+    // away from screen width edge
+
+    // start in middle X of cell
+    this.object.x = cell.x + (cell.w / 2);
+    // need to add some Y so the enemy
+    // is off screen
+    this.object.y = cell.y + cell.h + this.object.image.height;
+  } else {
+    // cell is on the right edge
+
+    // need to add some X so the enemy
+    // is off screen
+    this.object.x = cell.x + cell.w + this.object.image.width;
+    // start in middle Y of cell
+    this.object.y = cell.y + (cell.h / 2);
+  }
 
   this.update = function () {
     var currentCell = game.cells.find(function (cell) {

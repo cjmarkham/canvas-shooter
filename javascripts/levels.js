@@ -16,6 +16,7 @@ var levels = [
           y: 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
           willChangeDirection: true,
+          startingCell: 29,
           directionChanges: [
             {
               whenInCell: 28,
