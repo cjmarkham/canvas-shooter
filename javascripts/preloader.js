@@ -26,6 +26,10 @@ var Preloader = function () {
       id: 'explosion',
       src: 'images/sprites/explosion.png',
     },
+    {
+      id: 'powerup1',
+      src: 'images/sprites/powerup1.png',
+    },
   ]);
 
   this.queue.on('complete', function () {

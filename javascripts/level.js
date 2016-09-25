@@ -8,6 +8,7 @@ var Level = function (levelNumber) {
   this.timer = 0;
   this.enemyGroupsData = [];
   this.enemyGroups = [];
+  this.spawnedEnemyGroups = {};
   this.levelTimer = 0;
 
   this.start = function () {
@@ -38,7 +39,8 @@ var Level = function (levelNumber) {
   this.spawnEnemies = function () {
     var i;
     for (i = 0; i < this.enemyGroups.length; ++i) {
-      var enemies = this.enemyGroups[i].enemies;
+      var group = this.enemyGroups[i];
+      var enemies = group.enemies;
 
       if ( ! enemies.length) {
         this.enemyGroups.splice(i, 1);
@@ -50,9 +52,13 @@ var Level = function (levelNumber) {
         var enemy = enemies[j];
 
         if (enemy.spawnTime === this.levelTimer) {
-          console.log('spawn', enemy);
           game.enemiesLayer.addChild(enemy);
           enemies.shift();
+
+          if ( ! this.spawnedEnemyGroups.hasOwnProperty(group.id)) {
+            this.spawnedEnemyGroups[group.id] = [];
+          }
+          this.spawnedEnemyGroups[group.id].push(enemy);
         }
       }
     }
@@ -72,6 +78,15 @@ var Level = function (levelNumber) {
     this.updateExplosions();
     this.checkCollisions();
     this.updateBullets();
+    this.updatePowerups();
+  }
+
+  this.updatePowerups = function () {
+    var i;
+    for (i = 0; i < game.powerupsLayer.entities.length; ++i) {
+      var powerup = game.powerupsLayer.entities[i];
+      powerup.update();
+    }
   }
 
   this.updateBullets = function () {
@@ -164,6 +179,18 @@ var Level = function (levelNumber) {
           new Explosion(game.player.object.x, game.player.object.y);
           game.player.takeDamage(10);
           bullet.kill();
+        }
+      }
+    }
+
+    // check player collisions with powerups
+    var k;
+    for (j = 0; j < game.powerupsLayer.entities.length; ++j) {
+      var powerup = game.powerupsLayer.entities[j];
+
+      if ( ! game.player.respawning) {
+        if (ndgmr.checkPixelCollision(powerup.object, game.player.image)) {
+          powerup.collect();
         }
       }
     }

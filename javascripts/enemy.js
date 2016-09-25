@@ -15,7 +15,6 @@ var Enemy = function (group, data) {
   this.weapons = [];
   this.shootingInterval = Math.random() * 20;
 
-
   this.update = function () {
     this.object.vx = Math.cos(this.angle) * this.speed;
     this.object.vy = Math.sin(this.angle) * this.speed;
@@ -66,11 +65,40 @@ var Enemy = function (group, data) {
 
   this.kill = function () {
     game.updateScore(this.attributes.value);
+    // update the enemy attributes in the group
+    // to show that it was killed
+    var index = game.level.spawnedEnemyGroups[this.group.id].findIndex(function (enemy) {
+      return enemy.object.id === this.object.id;
+    }.bind(this));
+
+    game.level.spawnedEnemyGroups[this.group.id][index].killed = true;
+
+    // if this group gives a power up
+    if (this.group.givePowerUp) {
+      // if this is the last one of the group
+      if (index === this.group.enemyCount - 1) {
+        // Check if all were killed by the player
+        var givePowerUp = true;
+        var i;
+        for (i = 0; i < this.group.enemyCount - 1; ++i) {
+          var enemy = game.level.spawnedEnemyGroups[this.group.id][i];
+          if ( ! enemy.killed) {
+            givePowerUp = false;
+          }
+        }
+
+        if (givePowerUp) {
+          new PowerUp(this.object.x, this.object.y);
+        }
+      }
+    }
+
     this.destroy();
   }
 
   this.destroy = function () {
     game.enemiesLayer.removeChild(this);
+    // console.log(this.group.enemies.length);
   }
 
   this.updateWeapons = function () {
