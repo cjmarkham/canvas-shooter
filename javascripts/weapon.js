@@ -1,7 +1,7 @@
 var Weapon = function (entity, slot, isPlayerWeapon) {
   this.object = new createjs.Container();
-  this.object.x = entity.x + slot.x;
-  this.object.y = entity.y + slot.y;
+  this.object.x = entity.object.x + slot.x;
+  this.object.y = entity.object.y + slot.y;
   this.level = entity.level;
   this.isPlayerWeapon = isPlayerWeapon || false;
   this.slot = slot;
