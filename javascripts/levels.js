@@ -16,6 +16,17 @@ var levels = [
           y: 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
           speed: 150, // the speed of the enemy
+          willChangeDirection: true,
+          directionChanges: [
+            {
+              changeAt: 2.0,
+              angle: 160,
+            },
+            {
+              changeAt: 4.0,
+              angle: 180,
+            },
+          ],
         },
         {
           spawnTime: 2.5, // seconds
@@ -47,6 +58,17 @@ var levels = [
           y: height - 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
           speed: 150, // the speed of the enemy
+          willChangeDirection: true,
+          directionChanges: [
+            {
+              changeAt: 8.0,
+              angle: 200,
+            },
+            {
+              changeAt: 10.0,
+              angle: 180,
+            },
+          ],
         },
         {
           spawnTime: 8.5, // seconds

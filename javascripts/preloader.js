@@ -4,7 +4,7 @@ var Preloader = function () {
   this.queue.loadManifest([
     {
       id: 'playerPlane',
-      src: 'images/sprites/player-plane.png',
+      src: 'images/sprites/plane3.png',
     },
     {
       id: 'bullet1',

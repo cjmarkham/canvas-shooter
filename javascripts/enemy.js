@@ -15,6 +15,18 @@ var Enemy = function (group, data) {
   this.shootingInterval = Math.random() * 20;
 
   this.update = function () {
+
+    if (this.willChangeDirection) {
+      var i;
+      for (i = 0; i < this.directionChanges.length; ++i) {
+        var newDirection = this.directionChanges[i];
+
+        if (newDirection.changeAt === game.level.levelTimer) {
+          this.angle = newDirection.angle * Math.PI / 180;
+        }
+      }
+    }
+
     this.object.vx = Math.cos(this.angle) * this.speed;
     this.object.vy = Math.sin(this.angle) * this.speed;
 

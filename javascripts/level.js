@@ -146,7 +146,7 @@ var Level = function (levelNumber) {
       var enemy = game.enemiesLayer.entities[i];
 
       if ( ! game.player.respawning) {
-        if (ndgmr.checkPixelCollision(enemy.object, game.player.image)) {
+        if (ndgmr.checkPixelCollision(enemy.object, game.player.object)) {
           new Explosion(enemy.object.x, enemy.object.y);
           game.player.takeDamage();
           enemy.kill();
@@ -188,7 +188,7 @@ var Level = function (levelNumber) {
       var bullet = game.enemyBulletLayer.entities[k];
 
       if ( ! game.player.respawning) {
-        if (ndgmr.checkPixelCollision(bullet.object, game.player.image)) {
+        if (ndgmr.checkPixelCollision(bullet.object, game.player.object)) {
           new Explosion(game.player.object.x, game.player.object.y);
           game.player.takeDamage(10);
           bullet.kill();
@@ -213,7 +213,7 @@ var Level = function (levelNumber) {
       var powerup = game.powerupsLayer.entities[j];
 
       if ( ! game.player.respawning) {
-        if (ndgmr.checkPixelCollision(powerup.object, game.player.image)) {
+        if (ndgmr.checkPixelCollision(powerup.object, game.player.object)) {
           powerup.collect();
         }
       }

@@ -2,13 +2,14 @@ var Player = function () {
 
   MAX_LEVEL = 2;
 
-  this.object = new createjs.Container();
-  this.image = new createjs.Bitmap(preloader.get('playerPlane'));
-  this.object.addChild(this.image);
+  this.object = new createjs.Bitmap(preloader.get('playerPlane'));
+
+
+
   this.object.scaleX = 1;
   this.object.scaleY = 1;
   this.object.x = 20;
-  this.object.y = ((game.height / 2) - (this.image.image.height / 2));
+  this.object.y = ((game.height / 2) - (this.object.image.height / 2));
   this.hp = 1;
   this.moving = {
     left: false,
@@ -155,16 +156,16 @@ var Player = function () {
         this.object.x = 0;
       }
 
-      if (this.object.x >= (game.width - this.image.image.width)) {
-        this.object.x = game.width - this.image.image.width;
+      if (this.object.x >= (game.width - this.object.image.width)) {
+        this.object.x = game.width - this.object.image.width;
       }
 
       if (this.object.y <= 0) {
         this.object.y = 0;
       }
 
-      if (this.object.y >= (game.height - this.image.image.height)) {
-        this.object.y = game.height - this.image.image.height;
+      if (this.object.y >= (game.height - this.object.image.height)) {
+        this.object.y = game.height - this.object.image.height;
       }
 
       if (this.fireHeld) {
