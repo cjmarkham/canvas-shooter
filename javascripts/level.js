@@ -174,7 +174,7 @@ var Level = function (levelNumber) {
         if (ndgmr.checkPixelCollision(bullet.object, enemy.object)) {
           new Explosion(enemy.object.x, enemy.object.y);
           enemy.kill();
-          bullet.kill();
+          // bullet.kill();
         }
       }
 
