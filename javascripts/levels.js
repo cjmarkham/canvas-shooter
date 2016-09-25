@@ -15,7 +15,6 @@ var levels = [
           x: width + 50, // x position of spawn
           y: 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
-          speed: 150, // the speed of the enemy
           willChangeDirection: true,
           directionChanges: [
             {
@@ -34,7 +33,6 @@ var levels = [
           x: width + 50, // x position of spawn
           y: 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
-          speed: 150, // the speed of the enemy
         },
         {
           spawnTime: 4.0, // seconds
@@ -42,7 +40,6 @@ var levels = [
           x: width + 50, // x position of spawn
           y: 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
-          speed: 150, // the speed of the enemy
         },
       ]
     },
@@ -57,7 +54,6 @@ var levels = [
           x: width + 50, // x position of spawn
           y: height - 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
-          speed: 150, // the speed of the enemy
           willChangeDirection: true,
           directionChanges: [
             {
@@ -76,7 +72,6 @@ var levels = [
           x: width + 50, // x position of spawn
           y: height - 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
-          speed: 150, // the speed of the enemy
         },
         {
           spawnTime: 10.0, // seconds
@@ -84,7 +79,6 @@ var levels = [
           x: width + 50, // x position of spawn
           y: height - 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
-          speed: 150, // the speed of the enemy
         },
         {
           spawnTime: 11.5, // seconds
@@ -92,7 +86,6 @@ var levels = [
           x: width + 50, // x position of spawn
           y: height - 100, // y position of spawn
           angle: 180, // angle the enemy is facing (180 = forward)
-          speed: 150, // the speed of the enemy
         },
       ]
     }

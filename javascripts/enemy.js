@@ -12,44 +12,48 @@ var Enemy = function (group, data) {
   this.group = group;
   this.angle = this.angle * Math.PI / 180;
   // TODO: remove Object.assign
-  this.weapon = new Weapon(Object.assign({}, this, {level: this.attributes.level}), false);
   this.shootingInterval = Math.random() * 20;
 
   this.update = function () {
 
+    // If this enemy will change direction when spawned
     if (this.willChangeDirection) {
       var i;
       for (i = 0; i < this.directionChanges.length; ++i) {
         var newDirection = this.directionChanges[i];
 
+        // If the change at time is the same as the level time
+        // set the new angle
         if (newDirection.changeAt === game.level.levelTimer) {
           this.angle = newDirection.angle * Math.PI / 180;
         }
       }
     }
 
-    this.object.vx = Math.cos(this.angle) * this.speed;
-    this.object.vy = Math.sin(this.angle) * this.speed;
+    this.object.vx = Math.cos(this.angle) * this.attributes.speed;
+    this.object.vy = Math.sin(this.angle) * this.attributes.speed;
 
+    // Head in the direction
     this.object.x += this.object.vx * 33 / 1000;
     this.object.y += this.object.vy * 33 / 1000;
 
+    // calculate whether a shot can be made
+    // depending on the random shooting interval
     this.shootingInterval -= 0.1;
     if (this.shootingInterval <= 0) {
       this.shoot();
       this.shootingInterval = Math.random() * 40;
     }
 
+    // if this enemy is offscreen, remove it
     if (this.object.x < -50 || this.object.y < -50 || this.object.y > game.height + 50 || this.object.x > game.width + 50) {
       this.destroy();
       return;
     }
-
-    this.weapon.update(this.object.x, this.object.y);
   }
 
   this.shoot = function () {
-    this.weapon.shoot();
+    new EnemyBullet(this.attributes.level, this.object.x, this.object.y);
   }
 
   this.takeDamage = function () {

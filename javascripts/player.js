@@ -2,28 +2,30 @@ var Player = function () {
 
   MAX_LEVEL = 5;
 
-  this.object = new createjs.Bitmap(preloader.get('playerPlane'));
+  this.width = 480 * .3;
+  this.height = 256 * .3;
 
-  // var spritesheet = new createjs.SpriteSheet({
-  //   images: [preloader.get('explosion')],
-  //   frames: {
-  //     width: 128,
-  //     height: 128,
-  //     regX: 64,
-  //     regY: 64,
-  //     count: 72,
-  //   },
-  //   animations: {
-  //     explode: [0, 71, false, 1],
-  //   },
-  // });
+  var spritesheet = new createjs.SpriteSheet({
+    images: [preloader.get('playerPlane3')],
+    frames: {
+      width: 480,
+      height: 256,
+      regX: 241,
+      regY: 128,
+      count: 5,
+    },
+    animations: {
+      up: [0, 0, 'normal', 1],
+      normal: 2,
+      down: [4, 4, 'normal', 1]
+    },
+  });
+  this.object = new createjs.Sprite(spritesheet, 'normal');
 
-  // this.object = new createjs.Sprite(spritesheet, 'explode');
-
-  this.object.scaleX = 1;
-  this.object.scaleY = 1;
+  this.object.scaleX = .3;
+  this.object.scaleY = .3;
   this.object.x = 20;
-  this.object.y = ((game.height / 2) - (this.object.image.height / 2));
+  this.object.y = ((game.height / 2) - (this.height / 2));
   this.hp = 1;
   this.moving = {
     left: false,
@@ -33,10 +35,9 @@ var Player = function () {
   };
   this.fireHeld = false;
   this.lastTimeFired = 0;
-  this.level = 1;
+  this.level = 2;
   this.controllable = true;
   this.orb = undefined;
-  this.weapon = new Weapon(this, true);
   this.respawning = false;
 
   this.setLevel = function (level) {
@@ -53,8 +54,6 @@ var Player = function () {
     if (this.level === 3) {
       this.addOrb();
     }
-
-    this.weapon = new Weapon(this, true);
   }
 
   this.addOrb = function () {
@@ -68,7 +67,7 @@ var Player = function () {
   this.shoot = function () {
     // Check if we can fire
     if (this.lastTimeFired < new Date().getTime() - 150) {
-      this.weapon.shoot();
+      new PlayerBullet(this);
 
       if (this.orb) {
         this.orb.shoot();
@@ -100,7 +99,7 @@ var Player = function () {
     if (this.respawning) {
       this.object.alpha = (game.ticks % 4 === 0) ? 1 : 0;
       this.object.x += 5;
-      this.object.y = (game.height / 2) - (this.object.image.height / 2);
+      this.object.y = (game.height / 2) - (this.height / 2);
 
       if (this.object.x >= 100) {
         this.object.alpha = 1;
@@ -119,24 +118,26 @@ var Player = function () {
 
       if (this.moving.up) {
         this.object.y -= 10;
+        this.object.gotoAndPlay('up');
       } else if (this.moving.down) {
         this.object.y += 10;
+        this.object.gotoAndPlay('down');
       }
 
       if (this.object.x <= 0) {
         this.object.x = 0;
       }
 
-      if (this.object.x >= (game.width - this.object.image.width)) {
-        this.object.x = game.width - this.object.image.width;
+      if (this.object.x >= (game.width - this.width)) {
+        this.object.x = game.width - this.width;
       }
 
       if (this.object.y <= 0) {
         this.object.y = 0;
       }
 
-      if (this.object.y >= (game.height - this.object.image.height)) {
-        this.object.y = game.height - this.object.image.height;
+      if (this.object.y >= (game.height - this.height)) {
+        this.object.y = game.height - this.height;
       }
 
       if (this.fireHeld) {
@@ -146,7 +147,6 @@ var Player = function () {
       if (this.orb) {
         this.orb.update();
       }
-      this.weapon.update(this.object.x, this.object.y);
     }
   }
 };

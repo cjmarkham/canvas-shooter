@@ -1,7 +1,7 @@
-var PlayerBullet = function (level, x, y) {
-  this.object = new createjs.Bitmap(preloader.get('bullet' + level));
-  this.object.x = x;
-  this.object.y = y;
+var PlayerBullet = function (player) {
+  this.object = new createjs.Bitmap(preloader.get('bullet' + player.level));
+  this.object.x = player.object.x;
+  this.object.y = player.object.y - (this.object.image.height / 2);
   game.playerBulletLayer.addChild(this);
 
   this.update = function () {

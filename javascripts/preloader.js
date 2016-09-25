@@ -7,12 +7,24 @@ var Preloader = function () {
       src: 'images/sprites/player-plane.png',
     },
     {
+      id: 'playerPlane2',
+      src: 'images/sprites/player-plane2.png',
+    },
+    {
+      id: 'playerPlane3',
+      src: 'images/sprites/player-plane3.png',
+    },
+    {
       id: 'bullet1',
       src: 'images/sprites/bullet1.png',
     },
     {
       id: 'bullet2',
       src: 'images/sprites/bullet2.png',
+    },
+    {
+      id: 'bullet3',
+      src: 'images/sprites/bullet3.png',
     },
     {
       id: 'enemyBullet1',
