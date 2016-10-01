@@ -1,8 +1,8 @@
 var Game = function () {
   this.stage = null;
   this.canvas = null;
-  this.width = 0;
-  this.height = 0;
+  this.width = 1280;
+  this.height = 600;
   this.paused = false;
   this.player = null;
   this.ticks = 0;
@@ -57,11 +57,11 @@ var Game = function () {
   };
 
   this.init = function () {
+    document.getElementById('wrapper').style.width = this.width + 'px';
+    document.getElementById('wrapper').style.height = this.height + 'px';
     this.canvas = document.getElementById('main-canvas');
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
     this.stage = new createjs.Stage(this.canvas);
     this.createGrid();
 

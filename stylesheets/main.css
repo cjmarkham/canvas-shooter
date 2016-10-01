@@ -5,6 +5,11 @@ html, body {
   overflow: hidden;
 }
 
+#wrapper {
+  position: relative;
+  margin: 0 auto;
+}
+
 #background-canvas {
   position: absolute;
   left: 0;

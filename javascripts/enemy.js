@@ -40,7 +40,7 @@ var Enemy = function (group, data) {
       originY = this.startingCell.y - cellToMoveTo.h;
     } else if (this.startingCell.id <= 99 && this.startingCell.id >= 90) {
       // spawning from bottom cell
-      originX = this.startingCell.x + (this.startingCell.w / 2);
+      originX = this.startingCell.x - (this.startingCell.w / 2) + (this.object.image.width / 2);
       originY = this.startingCell.y + (this.startingCell.h + 100) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '9') {
       // Cell ends in a 9 (right most cell)
@@ -56,11 +56,11 @@ var Enemy = function (group, data) {
 
     // If ending at the top
     if (this.startingCell.id <= 9) {
-      targetX = cellToMoveTo.x + (cellToMoveTo.w / 2);
+      targetX = cellToMoveTo.x + (cellToMoveTo.w / 2) + (this.object.image.width / 2);
       targetY = cellToMoveTo.y - cellToMoveTo.h;
     } else if (this.startingCell.id <= 99 && this.startingCell.id >= 90) {
       // If ending on the bottom
-      targetX = cellToMoveTo.x + (cellToMoveTo.w / 2);
+      targetX = cellToMoveTo.x + (cellToMoveTo.w / 2) + (this.object.image.width / 2) + (cellToMoveTo.w / 2);
       targetY = cellToMoveTo.y + (cellToMoveTo.h + 100) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '9') {
       // If ending on the right
