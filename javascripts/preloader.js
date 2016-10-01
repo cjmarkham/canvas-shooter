@@ -31,6 +31,14 @@ var Preloader = function () {
       src: 'images/sprites/enemyBullet1.png',
     },
     {
+      id: 'enemyBullet2',
+      src: 'images/sprites/enemyBullet2.png',
+    },
+    {
+      id: 'enemyBulletTracking1',
+      src: 'images/sprites/enemyBullet2.png',
+    },
+    {
       id: 'orb',
       src: 'images/sprites/orb.png',
     },

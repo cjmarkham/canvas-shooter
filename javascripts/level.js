@@ -37,7 +37,6 @@ var Level = function (levelNumber) {
       var enemyGroupData = this.enemyGroupsData[i];
       var group = new EnemyGroup(enemyGroupData);
       this.enemyGroups.push(group);
-      console.log('new group', group);
 
       totalEnemies += group.enemies.length;
     }
@@ -64,6 +63,7 @@ var Level = function (levelNumber) {
 
         if (enemy.spawnTime === this.levelTimer) {
           game.enemiesLayer.addChild(enemy);
+          enemy.isSpawned = true;
           enemies.splice(j, 1);
 
           if ( ! this.spawnedEnemyGroups.hasOwnProperty(group.id)) {
