@@ -10,43 +10,39 @@ var levels = [
       givePowerUp: true, // give a powerup if all enemies killed
       enemies: [
         {
-          uniqueId: 1,
           spawnTime: 1.0, // seconds
           type: 'orb',
-          startingCell: 29,
+          startingCell: 80,
           endingCell: 10,
           movesVia: [
-            28, 56, 23
+            83, 23
           ],
         },
         {
-          uniqueId: 2,
           spawnTime: 1.0, // seconds
           type: 'orb',
-          startingCell: 49,
-          endingCell: 70,
+          startingCell: 91,
+          endingCell: 98,
           movesVia: [
-            47, 34
+            22, 36
           ],
         },
         {
-          uniqueId: 3,
           spawnTime: 1.0, // seconds
           type: 'orb',
-          startingCell: 69,
-          endingCell: 70,
+          startingCell: 19,
+          endingCell: 79,
           movesVia: [
-            67, 96
+            15, 75
           ],
         },
         {
-          uniqueId: 4,
           spawnTime: 1.0, // seconds
           type: 'orb',
-          startingCell: 99,
-          endingCell: 50,
+          startingCell: 1,
+          endingCell: 8,
           movesVia: [
-            97, 54
+            43, 36
           ],
         },
       ],

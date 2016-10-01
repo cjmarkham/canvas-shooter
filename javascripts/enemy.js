@@ -5,6 +5,9 @@ var Enemy = function (group, data) {
     this[keys[i]] = data[keys[i]];
   }
   this.currentCell = {};
+  this.curveStep = 0;
+  this.curveLUT = [];
+  this.speed = 0;
 
   this.init = function () {
     this.attributes = new OrbEnemy(data.x, data.y);
@@ -14,7 +17,6 @@ var Enemy = function (group, data) {
     this.group = group;
     this.shootingInterval = Math.random() * 20;
     this.startingCell = game.cells[this.startingCell];
-    console.log(this.uniqueId, this.startingCell.id, 'spawned');
 
     this.calculateCurve();
   };
@@ -22,11 +24,48 @@ var Enemy = function (group, data) {
   this.calculateCurve = function () {
     var i;
     var cellToMoveTo = game.cells[this.endingCell];
-    var targetX = cellToMoveTo.x;
-    var targetY = cellToMoveTo.y + (cellToMoveTo.h / 2) - (this.object.image.height / 2);
 
-    var originX = this.startingCell.x + this.startingCell.w;
-    var originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
+    var originX, originY, targetX, targetY;
+
+    // Calculate starting bounds from starting cell
+
+    // If spawning from the top
+    if (this.startingCell.id <= 9) {
+      originX = this.startingCell.x + (this.startingCell.w / 2);
+      originY = this.startingCell.y - (this.object.image.height / 2);
+    } else if (this.startingCell.id <= 99 && this.startingCell.id >= 90) {
+      // spawning from bottom cell
+      originX = this.startingCell.x + (this.startingCell.w / 2);
+      originY = this.startingCell.y - (this.object.image.height / 2) + this.startingCell.h;
+    } else if (this.startingCell.id.toString()[1] === '9') {
+      // Cell ends in a 9 (right most cell)
+      originX = this.startingCell.x + this.startingCell.w;
+      originY = originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
+    } else if (this.startingCell.id.toString()[1] === '0') {
+      // Cell ends in a 0 (left most cell)
+      originX = this.startingCell.x;
+      originY = originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
+    }
+
+    // Calculate ending bounds from end cell
+
+    // If ending at the top
+    if (this.startingCell.id <= 9) {
+      targetX = cellToMoveTo.x + (cellToMoveTo.w / 2);
+      targetY = cellToMoveTo.y - (this.object.image.height / 2);
+    } else if (this.startingCell.id <= 99 && this.startingCell.id >= 90) {
+      // If ending on the bottom
+      targetX = cellToMoveTo.x + (cellToMoveTo.w / 2);
+      targetY = cellToMoveTo.y + cellToMoveTo.h - (this.object.image.height / 2);
+    } else if (this.startingCell.id.toString()[1] === '9') {
+      // If ending on the right
+      targetX = cellToMoveTo.x + cellToMoveTo.w;
+      targetY = cellToMoveTo.y + (cellToMoveTo.h / 2) - (this.object.image.height / 2);
+    } else if (this.startingCell.id.toString()[1] === '0') {
+      // If endingon the left
+      targetX = cellToMoveTo.x;
+      targetY = cellToMoveTo.y + (cellToMoveTo.h / 2) - (this.object.image.height / 2);
+    }
 
     var path = [
       originX, originY,
@@ -41,6 +80,11 @@ var Enemy = function (group, data) {
     path.push(targetX, targetY);
 
     this.curve = new Bezier(path);
+
+    this.speed = 8 / this.curve.length();
+    this.curveLUT = this.curve.getLUT(10);
+
+    console.log(this.curveLUT);
 
     if (game.debugMode) {
       var points = this.curve.points;
@@ -66,19 +110,31 @@ var Enemy = function (group, data) {
     }
   };
 
-  this.curveStep = 0;
+  this.getLineAngle = function (x1, y1, x2, y2) {
+    var dx = x2 - x1,
+        dy = y2 - y1,
+        th = Math.atan2(dy, dx);
+
+    return th * 180 / Math.PI;
+  };
 
   this.update = function () {
-    if (this.id == 2) {
-      console.log(this.id, this.object.x, this.object.y);
-    }
     var step = this.curve.get(this.curveStep);
-    this.curveStep += 0.008;
+    this.curveStep += this.speed;
+
+    var angle = this.getLineAngle(this.object.x, this.object.y, step.x, step.y);
+
     if (this.curveStep <= 1) {
+      this.object.rotation = angle;
+
       this.object.x = step.x;
       this.object.y = step.y;
     } else {
-      this.object.x -= 8;
+      var angleInRads = angle * Math.PI / 180;
+      this.object.vx = Math.cos(angleInRads) * 150;
+      this.object.vy = Math.sin(angleInRads) * 150;
+      this.object.x += this.object.vx * 33 / 1000;
+      this.object.y += this.object.vy * 33 / 1000;
     }
 
     // calculate whether a shot can be made
@@ -96,7 +152,6 @@ var Enemy = function (group, data) {
       this.object.y > game.height + 50 ||
       this.object.x > game.width + 50
     ) {
-      console.log(this.uniqueId, 'off screen');
       this.destroy();
       return;
     }
