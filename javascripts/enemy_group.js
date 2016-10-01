@@ -14,4 +14,4 @@ var EnemyGroup = function (group) {
     // from the array when they are spawned
     this.enemyCount++;
   }
-}
+};

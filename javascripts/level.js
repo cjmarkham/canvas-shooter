@@ -24,11 +24,11 @@ var Level = function (levelNumber) {
         $('#timer span').text(this.levelTimer);
       }
     }.bind(this), 500);
-  }
+  };
 
   this.complete = function () {
     clearInterval(this.levelTimer);
-  }
+  };
 
   this.createEnemyGroups = function () {
     var i;
@@ -37,6 +37,7 @@ var Level = function (levelNumber) {
       var enemyGroupData = this.enemyGroupsData[i];
       var group = new EnemyGroup(enemyGroupData);
       this.enemyGroups.push(group);
+      console.log('new group', group);
 
       totalEnemies += group.enemies.length;
     }
@@ -44,7 +45,7 @@ var Level = function (levelNumber) {
     if (game.debugMode) {
       $('#enemies span').text(totalEnemies);
     }
-  }
+  };
 
   this.spawnEnemies = function () {
     var i;
@@ -72,7 +73,7 @@ var Level = function (levelNumber) {
         }
       }
     }
-  }
+  };
 
   this.updateExplosions = function () {
     var i;
@@ -80,7 +81,7 @@ var Level = function (levelNumber) {
       var explosion = game.explosionLayer.entities[i];
       explosion.update();
     }
-  }
+  };
 
   this.update = function () {
     this.spawnEnemies();
@@ -89,7 +90,7 @@ var Level = function (levelNumber) {
     this.checkCollisions();
     this.updateBullets();
     this.updatePowerups();
-  }
+  };
 
   this.updatePowerups = function () {
     var i;
@@ -97,21 +98,21 @@ var Level = function (levelNumber) {
       var powerup = game.powerupsLayer.entities[i];
       powerup.update();
     }
-  }
+  };
 
   this.updateBullets = function () {
     var i;
     for (i = 0; i < game.playerBulletLayer.entities.length; ++i) {
-      var bullet = game.playerBulletLayer.entities[i];
-      bullet.update();
+      var playerBullet = game.playerBulletLayer.entities[i];
+      playerBullet.update();
     }
 
     var j;
     for (j = 0; j < game.enemyBulletLayer.entities.length; ++j) {
-      var bullet = game.enemyBulletLayer.entities[j];
-      bullet.update();
+      var enemyBullet = game.enemyBulletLayer.entities[j];
+      enemyBullet.update();
     }
-  }
+  };
 
   this.initBackground = function () {
     this.background.width = game.width;
@@ -123,10 +124,10 @@ var Level = function (levelNumber) {
         x: Math.floor(Math.random() * game.width),
         y: Math.floor(Math.random() * game.height),
         speed: this.starSpeeds[randomNumber],
-      }
+      };
       this.stars.push(star);
     }
-  }
+  };
 
   this.updateBackground = function () {
     this.backgroundContext.fillStyle = 'black';
@@ -146,7 +147,7 @@ var Level = function (levelNumber) {
       this.backgroundContext.fillStyle = this.starColors[randomNumber];
       this.backgroundContext.fillRect(star.x, star.y, 1, 1);
     }
-  }
+  };
 
   this.checkCollisions = function () {
     // check enemy collisions with the player
@@ -191,19 +192,19 @@ var Level = function (levelNumber) {
     // check enemy bullet collisions with the player
     var k;
     for (k = 0; k < game.enemyBulletLayer.entities.length; ++k) {
-      var bullet = game.enemyBulletLayer.entities[k];
+      var enemyBullet = game.enemyBulletLayer.entities[k];
 
       if ( ! game.player.respawning) {
-        if (ndgmr.checkPixelCollision(bullet.object, game.player.object)) {
+        if (ndgmr.checkPixelCollision(enemyBullet.object, game.player.object)) {
           new Explosion(game.player.object.x, game.player.object.y);
           game.player.takeDamage(10);
-          bullet.kill();
+          enemyBullet.kill();
         }
       }
 
       // check enemy bullet collisions with player orbs
       if (game.player.orb) {
-        if (ndgmr.checkPixelCollision(bullet.object, game.player.orb.object)) {
+        if (ndgmr.checkPixelCollision(enemyBullet.object, game.player.orb.object)) {
           new Explosion(game.player.orb.object.x, game.player.orb.object.y);
           game.player.orb.kill();
         }
@@ -211,9 +212,9 @@ var Level = function (levelNumber) {
     }
 
     // check player collisions with powerups
-    var k;
-    for (j = 0; j < game.powerupsLayer.entities.length; ++j) {
-      var powerup = game.powerupsLayer.entities[j];
+    var l;
+    for (l = 0; l < game.powerupsLayer.entities.length; ++l) {
+      var powerup = game.powerupsLayer.entities[l];
 
       if ( ! game.player.respawning) {
         if (ndgmr.checkPixelCollision(powerup.object, game.player.object)) {
@@ -221,5 +222,5 @@ var Level = function (levelNumber) {
         }
       }
     }
-  }
-}
+  };
+};
