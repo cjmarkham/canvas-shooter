@@ -10,79 +10,34 @@ var levels = [
       givePowerUp: true, // give a powerup if all enemies killed
       enemies: [
         {
+          uniqueId: 1,
           spawnTime: 1.0, // seconds
           type: 'orb',
-          x: width + 50, // x position of spawn
-          y: 100, // y position of spawn
-          angle: 180, // angle the enemy is facing (180 = forward)
-          willChangeDirection: true,
           startingCell: 29,
-          directionChanges: {
-            whenInCell: 28,
-            gotoCell: 4,
-          },
+          movesToCell: 4,
         },
-        // {
-        //   spawnTime: 2.5, // seconds
-        //   type: 'orb',
-        //   x: width + 50, // x position of spawn
-        //   y: 100, // y position of spawn
-        //   angle: 180, // angle the enemy is facing (180 = forward)
-        // },
-        // {
-        //   spawnTime: 4.0, // seconds
-        //   type: 'orb',
-        //   x: width + 50, // x position of spawn
-        //   y: 100, // y position of spawn
-        //   angle: 180, // angle the enemy is facing (180 = forward)
-        // },
-      ]
-    },
-    // group 2
-    // {
-    //   id: 2,
-    //   givePowerUp: false, // give a powerup if all enemies killed
-    //   enemies: [
-    //     {
-    //       spawnTime: 7.0, // seconds
-    //       type: 'orb',
-    //       x: width + 50, // x position of spawn
-    //       y: height - 100, // y position of spawn
-    //       angle: 180, // angle the enemy is facing (180 = forward)
-    //       willChangeDirection: true,
-    //       directionChanges: [
-    //         {
-    //           changeAt: 8.0,
-    //           angle: 200,
-    //         },
-    //         {
-    //           changeAt: 10.0,
-    //           angle: 180,
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       spawnTime: 8.5, // seconds
-    //       type: 'orb',
-    //       x: width + 50, // x position of spawn
-    //       y: height - 100, // y position of spawn
-    //       angle: 180, // angle the enemy is facing (180 = forward)
-    //     },
-    //     {
-    //       spawnTime: 10.0, // seconds
-    //       type: 'orb',
-    //       x: width + 50, // x position of spawn
-    //       y: height - 100, // y position of spawn
-    //       angle: 180, // angle the enemy is facing (180 = forward)
-    //     },
-    //     {
-    //       spawnTime: 11.5, // seconds
-    //       type: 'orb',
-    //       x: width + 50, // x position of spawn
-    //       y: height - 100, // y position of spawn
-    //       angle: 180, // angle the enemy is facing (180 = forward)
-    //     },
-    //   ]
-    // }
+        {
+          uniqueId: 2,
+          spawnTime: 1.0, // seconds
+          type: 'orb',
+          startingCell: 49,
+          movesToCell: 32,
+        },
+        {
+          uniqueId: 3,
+          spawnTime: 1.0, // seconds
+          type: 'orb',
+          startingCell: 69,
+          movesToCell: 94,
+        },
+        {
+          uniqueId: 4,
+          spawnTime: 1.0, // seconds
+          type: 'orb',
+          startingCell: 99,
+          movesToCell: 52,
+        }
+      ],
+    }
   ]
-]
+];
