@@ -14,29 +14,41 @@ var levels = [
           spawnTime: 1.0, // seconds
           type: 'orb',
           startingCell: 29,
-          movesToCell: 4,
+          endingCell: 10,
+          movesVia: [
+            28, 56, 23
+          ],
         },
         {
           uniqueId: 2,
           spawnTime: 1.0, // seconds
           type: 'orb',
           startingCell: 49,
-          movesToCell: 32,
+          endingCell: 70,
+          movesVia: [
+            47, 34
+          ],
         },
         {
           uniqueId: 3,
           spawnTime: 1.0, // seconds
           type: 'orb',
           startingCell: 69,
-          movesToCell: 94,
+          endingCell: 70,
+          movesVia: [
+            67, 96
+          ],
         },
         {
           uniqueId: 4,
           spawnTime: 1.0, // seconds
           type: 'orb',
           startingCell: 99,
-          movesToCell: 52,
-        }
+          endingCell: 50,
+          movesVia: [
+            97, 54
+          ],
+        },
       ],
     }
   ]
