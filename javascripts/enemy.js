@@ -66,6 +66,9 @@ var Enemy = function (group, data) {
       targetY = cellToMoveTo.y + (cellToMoveTo.h / 2) - (this.object.image.height / 2);
     }
 
+    this.object.x = originX;
+    this.object.y = originY;
+
     var path = [
       originX, originY,
     ];
