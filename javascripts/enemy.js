@@ -75,8 +75,8 @@ var Enemy = function (group, data) {
       var originX = this.startingCell.x + this.startingCell.w;
       var originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
 
-      var curve1Cell = game.cells[this.startingCell.id - 1];
-      var curve2Cell = game.cells[cellToMoveTo.id + 1];
+      var curve1Cell = game.cells[this.startingCell.id - 2];
+      var curve2Cell = game.cells[cellToMoveTo.id + 2];
 
       var curve1CellX = curve1Cell.x + (curve1Cell.w / 2);
       var curve1CellY = curve1Cell.y + (curve1Cell.h / 2) - (this.object.image.height / 2);

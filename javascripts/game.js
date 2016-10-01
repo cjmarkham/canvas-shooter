@@ -8,6 +8,7 @@ var Game = function () {
   this.ticks = 0;
   this.score = 0;
   this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1;
+  // this.debugMode = false;
   this.cells = [];
   this.grid = new createjs.Container();
   createjs.MotionGuidePlugin.install();
@@ -22,22 +23,33 @@ var Game = function () {
     var y;
     for (x = 0; x < rows; ++x) {
       for (y = 0; y < columns; ++y) {
-        var graphics = new createjs.Graphics().beginStroke('red').drawRect(y * this.cellWidth, x * this.cellHeight, this.cellWidth, this.cellHeight);
-        var shape = new createjs.Shape(graphics);
 
-        this.stage.addChild(shape);
-        var cell = {
+        if (this.debugMode) {
+          var graphics = new createjs.Graphics()
+            .beginStroke('red')
+            .drawRect(
+              y * this.cellWidth,
+              x * this.cellHeight,
+              this.cellWidth,
+              this.cellHeight
+            );
+          var shape = new createjs.Shape(graphics);
+
+          var text = new createjs.Text(
+            this.cells.length, '20px Arial', '#ffffff'
+          );
+          text.x = cell.x;
+          text.y = cell.y;
+          this.stage.addChild(shape, text);
+        }
+
+        this.cells.push({
           id: this.cells.length,
           x: y * this.cellWidth,
           y: x * this.cellHeight,
           w: this.cellWidth,
           h: this.cellHeight,
-        };
-        var text = new createjs.Text(this.cells.length, '20px Arial', '#ffffff');
-        text.x = cell.x;
-        text.y = cell.y;
-        this.stage.addChild(text);
-        this.cells.push(cell);
+        });
       }
     }
   };
