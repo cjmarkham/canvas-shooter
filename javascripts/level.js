@@ -63,7 +63,7 @@ var Level = function (levelNumber) {
 
         if (enemy.spawnTime === this.levelTimer) {
           game.enemiesLayer.addChild(enemy);
-          enemies.shift();
+          enemies.splice(j, 1);
 
           if ( ! this.spawnedEnemyGroups.hasOwnProperty(group.id)) {
             this.spawnedEnemyGroups[group.id] = [];
