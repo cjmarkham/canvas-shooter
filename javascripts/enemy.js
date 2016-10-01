@@ -4,87 +4,129 @@ var Enemy = function (group, data) {
   for (i = 0; i < keys.length; ++i) {
     this[keys[i]] = data[keys[i]];
   }
-  this.attributes = new OrbEnemy(data.x, data.y);
+  this.currentCell = {};
 
-  this.object = new createjs.Bitmap(preloader.get(this.attributes.sprite));
-  this.group = group;
-  this.angle = this.angle * Math.PI / 180;
-  this.shootingInterval = Math.random() * 20;
-  this.currentCell;
+  this.init = function () {
+    this.attributes = new OrbEnemy(data.x, data.y);
+    this.curve = {};
 
-  var cellNumber = data.startingCell;
-  var cell = game.cells[cellNumber];
-  var edgeCells = [9, 19, 29, 39, 49, 59, 69, 79, 89, 99];
+    this.object = new createjs.Bitmap(preloader.get(this.attributes.sprite));
+    this.group = group;
+    // this.angle = this.angle * Math.PI / 180;
+    this.shootingInterval = Math.random() * 20;
+    this.startingCell = game.cells[this.startingCell];
 
-  // cell is in the top row
-  // away from screen width edge
-  if (cellNumber <= 8) {
-    // Start in middle X of cell
-    this.object.x = cell.x + (cell.w / 2);
-    // need to remove some Y so the enemy
-    // is off screen
-    this.object.y = cell.y - this.object.image.height;
-  } else if (cellNumber <= 90 && cellNumber >= 90 && edgeCells.indexOf(cellNumber) === -1) {
-    // cell is on bottom row
+    // var cellNumber = data.startingCell;
+    // var cell = game.cells[29];
+    // var edgeCells = [9, 19, 29, 39, 49, 59, 69, 79, 89, 99];
+
+    // cell is in the top row
     // away from screen width edge
+    // if (cellNumber <= 8) {
+    //   // Start in middle X of cell
+    //   this.object.x = cell.x + cell.w;
+    //   // need to remove some Y so the enemy
+    //   // is off screen
+    //   this.object.y = cell.y - this.object.image.height;
+    // } else if (cellNumber <= 90 && cellNumber >= 90 && edgeCells.indexOf(cellNumber) === -1) {
+    //   // cell is on bottom row
+    //   // away from screen width edge
+    //
+    //   // start in middle X of cell
+    //   this.object.x = cell.x + (cell.w / 2);
+    //   // need to add some Y so the enemy
+    //   // is off screen
+    //   this.object.y = cell.y + cell.h + this.object.image.height;
+    // } else {
+    //   // cell is on the right edge
+    //
+    //   // need to add some X so the enemy
+    //   // is off screen
+    //   this.object.x = cell.x + cell.w + this.object.image.width;
+    //   // start in middle Y of cell
+    //   this.object.y = cell.y + (cell.h / 2) - (this.object.image.height / 2);
+    // }
 
-    // start in middle X of cell
-    this.object.x = cell.x + (cell.w / 2);
-    // need to add some Y so the enemy
-    // is off screen
-    this.object.y = cell.y + cell.h + this.object.image.height;
-  } else {
-    // cell is on the right edge
+    this.calculateCurve();
+    var points = this.curve.points;
+    var pathArray = [
+      points[0].x, points[0].y, // moveTo
+      points[0].x, points[0].y, points[1].x, points[1].y,
+      points[2].x, points[2].y, points[3].x, points[3].y
+    ];
 
-    // need to add some X so the enemy
-    // is off screen
-    this.object.x = cell.x + cell.w + this.object.image.width;
-    // start in middle Y of cell
-    this.object.y = cell.y + (cell.h / 2);
-  }
+    // createjs.Tween.get(this.object).to({
+    //   guide: {
+    //     path: pathArray,
+    //   }
+    // }, 4000, createjs.Ease.linear);
+  };
+
+  this.calculateCurve = function () {
+    var i;
+    // for (i = 0; i < this.directionChanges.length; ++i) {
+      // var newDirection = this.directionChanges[i];
+      var newDirection = this.directionChanges;
+
+      var cellToMoveTo = game.cells[newDirection.gotoCell];
+      var targetX = cellToMoveTo.x + (cellToMoveTo.w / 2);
+      var targetY = cellToMoveTo.y + (cellToMoveTo.h / 2) - (this.object.image.height / 2);
+
+      var originX = this.startingCell.x + this.startingCell.w;
+      var originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
+
+      var curve1Cell = game.cells[this.startingCell.id - 1];
+      var curve2Cell = game.cells[cellToMoveTo.id + 1];
+
+      var curve1CellX = curve1Cell.x + (curve1Cell.w / 2);
+      var curve1CellY = curve1Cell.y + (curve1Cell.h / 2) - (this.object.image.height / 2);
+
+      var curve2CellX = curve2Cell.x + (curve2Cell.w / 2);
+      var curve2CellY = curve2Cell.y + (curve2Cell.h / 2) - (this.object.image.height / 2);
+
+      this.curve = new Bezier(
+        originX, originY,
+        curve1CellX, curve1CellY,
+        curve2CellX, curve2CellY,
+        targetX, targetY
+      );
+
+      if (game.debugMode) {
+        var points = this.curve.points;
+        var line = new createjs.Shape();
+        line.graphics.setStrokeStyle(3);
+        line.graphics.beginStroke('red');
+        line.graphics.moveTo(points[0].x, points[1].y + (this.object.image.height / 2));
+        line.graphics.bezierCurveTo(
+          points[1].x, points[1].y + (this.object.image.height / 2),
+          points[2].x, points[2].y + (this.object.image.height / 2),
+          points[3].x, points[3].y + (this.object.image.height / 2)
+        );
+        game.stage.addChild(line);
+
+        var j;
+        for (j = 0; j < points.length; j++) {
+          var graphics = new createjs.Graphics();
+          graphics.beginFill('blue');
+          graphics.drawCircle(points[j].x, points[j].y + (this.object.image.height / 2), 5);
+          var shape = new createjs.Shape(graphics);
+          game.stage.addChild(shape);
+        }
+      }
+    // }
+  };
+
+  this.curveStep = 0;
 
   this.update = function () {
-    var currentCell = game.cells.find(function (cell) {
-      var x = cell.x;
-      var maxX = cell.x + cell.w;
-      var y = cell.y;
-      var maxY = cell.y + cell.h;
-
-      if (this.object.x >= x && this.object.x <= maxX && this.object.y >= y && this.object.y <= maxY) {
-        return cell;
-      }
-    }.bind(this));
-
-    // If this enemy will change direction when spawned
-    if (this.willChangeDirection && currentCell) {
-      var i;
-      for (i = 0; i < this.directionChanges.length; ++i) {
-        var newDirection = this.directionChanges[i];
-
-        if (newDirection.whenInCell === currentCell.id) {
-          var cellToMoveTo = game.cells[newDirection.gotoCell];
-          var targetX = cellToMoveTo.x + (cellToMoveTo.x + cellToMoveTo.w);
-          var targetY = cellToMoveTo.y + (cellToMoveTo.y + cellToMoveTo.h);
-
-          var originX = currentCell.x + (currentCell.x + currentCell.w);
-          var originY = currentCell.y + (currentCell.y + currentCell.h);
-
-          var angle =  Math.atan2(targetY - originY, targetX - originX);
-          this.angle = angle;
-        }
-
-        if (currentCell.id === newDirection.gotoCell) {
-          this.angle = Math.PI;
-        }
-      }
+    var step = this.curve.get(this.curveStep);
+    this.curveStep += 0.008;
+    if (this.curveStep <= 1) {
+      this.object.x = step.x;
+      this.object.y = step.y;
+    } else {
+      this.object.x -= 8;
     }
-
-    this.object.vx = Math.cos(this.angle) * this.attributes.speed;
-    this.object.vy = Math.sin(this.angle) * this.attributes.speed;
-
-    // Head in the direction
-    this.object.x += this.object.vx * 33 / 1000;
-    this.object.y += this.object.vy * 33 / 1000;
 
     // calculate whether a shot can be made
     // depending on the random shooting interval
@@ -95,20 +137,20 @@ var Enemy = function (group, data) {
     }
 
     // if this enemy is offscreen, remove it
-    if (this.object.x < -50 || this.object.y < -50 || this.object.y > game.height + 50 || this.object.x > game.width + 50) {
+    if (
+      this.object.x < -50 ||
+      this.object.y < -50 ||
+      this.object.y > game.height + 50 ||
+      this.object.x > game.width + 50
+    ) {
       this.destroy();
       return;
     }
-  }
-
-  this.gotoCell = function (cellIndex) {
-    var cell = game.cells[cellIndex];
-
-  }
+  };
 
   this.shoot = function () {
     new EnemyBullet(this.attributes.level, this.object.x, this.object.y);
-  }
+  };
 
   this.takeDamage = function () {
     this.attributes.hp -= 1;
@@ -116,7 +158,7 @@ var Enemy = function (group, data) {
     if (this.attributes.hp === 0) {
       this.kill();
     }
-  }
+  };
 
   this.kill = function () {
     game.updateScore(this.attributes.value);
@@ -149,7 +191,7 @@ var Enemy = function (group, data) {
     }
 
     this.destroy();
-  }
+  };
 
   this.destroy = function () {
     game.enemiesLayer.removeChild(this);
@@ -158,5 +200,5 @@ var Enemy = function (group, data) {
       var count = parseInt($('#enemies span').text(), 10);
       $('#enemies span').text(count - 1);
     }
-  }
-}
+  };
+};

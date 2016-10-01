@@ -7,6 +7,7 @@ var EnemyGroup = function (group) {
   var i;
   for (i = 0; i < group.enemies.length; ++i) {
     var enemy = new Enemy(this, group.enemies[i]);
+    enemy.init();
     this.enemies.push(enemy);
 
     // Store the total enemies since they are shifted

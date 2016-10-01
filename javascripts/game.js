@@ -1,15 +1,16 @@
 var Game = function () {
-  this.stage;
-  this.canvas;
-  this.width;
-  this.height;
+  this.stage = null;
+  this.canvas = null;
+  this.width = 0;
+  this.height = 0;
   this.paused = false;
-  this.player;
+  this.player = null;
   this.ticks = 0;
   this.score = 0;
   this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1;
   this.cells = [];
   this.grid = new createjs.Container();
+  createjs.MotionGuidePlugin.install();
 
   this.createGrid = function () {
     this.cellWidth = this.width / 10;
@@ -31,15 +32,15 @@ var Game = function () {
           y: x * this.cellHeight,
           w: this.cellWidth,
           h: this.cellHeight,
-        }
+        };
         var text = new createjs.Text(this.cells.length, '20px Arial', '#ffffff');
         text.x = cell.x;
         text.y = cell.y;
-        this.stage.addChild(text)
+        this.stage.addChild(text);
         this.cells.push(cell);
       }
     }
-  }
+  };
 
   this.init = function () {
     this.canvas = document.getElementById('main-canvas');
@@ -79,7 +80,7 @@ var Game = function () {
 
     this.level = new Level(1);
     this.level.start();
-  }
+  };
 
   this.keyDown = function (e) {
     // P pressed
@@ -143,10 +144,10 @@ var Game = function () {
     this.enemiesLayer.update();
 
     $('#fps span').text(Math.floor(createjs.Ticker.getMeasuredFPS()));
-  }
+  };
 
   this.updateScore = function (number) {
     this.score += number;
     document.getElementById('score').innerText = Utils.pad(this.score, 8);
-  }
+  };
 };

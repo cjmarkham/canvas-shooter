@@ -17,16 +17,10 @@ var levels = [
           angle: 180, // angle the enemy is facing (180 = forward)
           willChangeDirection: true,
           startingCell: 29,
-          directionChanges: [
-            {
-              whenInCell: 28,
-              gotoCell: 4,
-            },
-            {
-              whenInCell: 2,
-              gotoCell: 50,
-            },
-          ],
+          directionChanges: {
+            whenInCell: 28,
+            gotoCell: 4,
+          },
         },
         // {
         //   spawnTime: 2.5, // seconds
