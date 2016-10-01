@@ -31,7 +31,7 @@ var Game = function () {
           w: this.cellWidth,
           h: this.cellHeight,
         };
-        
+
         if (this.debugMode) {
           var graphics = new createjs.Graphics()
             .beginStroke('red')

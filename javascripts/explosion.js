@@ -33,10 +33,10 @@ var Explosion = function (x, y) {
 
   this.update = function () {
     this.object.x += 5;
-    this.object.alpha -= .01;
+    this.object.alpha -= 0.01;
 
     if (this.object.alpha <= 0) {
       game.explosionLayer.removeChild(this);
     }
-  }
-}
+  };
+};

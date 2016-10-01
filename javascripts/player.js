@@ -2,8 +2,8 @@ var Player = function () {
 
   MAX_LEVEL = 5;
 
-  this.width = 480 * .3;
-  this.height = 256 * .3;
+  this.width = 480 * 0.3;
+  this.height = 256 * 0.3;
 
   var spritesheet = new createjs.SpriteSheet({
     images: [preloader.get('playerPlane3')],
@@ -22,8 +22,8 @@ var Player = function () {
   });
   this.object = new createjs.Sprite(spritesheet, 'normal');
 
-  this.object.scaleX = .3;
-  this.object.scaleY = .3;
+  this.object.scaleX = 0.3;
+  this.object.scaleY = 0.3;
   this.object.x = this.width / 2;
   this.object.y = ((game.height / 2) - (this.height / 2));
   this.hp = 1;
@@ -42,7 +42,7 @@ var Player = function () {
 
   this.setLevel = function (level) {
     this.level = level;
-  }
+  };
 
   this.levelUp = function () {
     this.level++;
@@ -54,7 +54,7 @@ var Player = function () {
     if (this.level === 3) {
       this.addOrb();
     }
-  }
+  };
 
   this.addOrb = function () {
     if (this.orb) {
@@ -75,16 +75,19 @@ var Player = function () {
 
       this.lastTimeFired = new Date().getTime();
     }
-  }
+  };
 
   this.takeDamage = function (damage) {
     // this.hp -= damage;
     this.setLevel(1);
+    if (this.orb) {
+      this.orb.kill();
+    }
 
     // if (this.hp <= 0) {
       this.kill();
     // }
-  }
+  };
 
   this.kill = function () {
     this.setLevel(1);
@@ -93,7 +96,7 @@ var Player = function () {
     setTimeout(function () {
       this.respawning = true;
     }.bind(this), 1000);
-  }
+  };
 
   this.update = function () {
     if (this.respawning) {
@@ -103,7 +106,7 @@ var Player = function () {
 
       if (this.object.x >= 100) {
         this.object.alpha = 1;
-        this.respawning = false
+        this.respawning = false;
         this.controllable = true;
         // this.hp = 1;
       }
@@ -148,5 +151,5 @@ var Player = function () {
         this.orb.update();
       }
     }
-  }
+  };
 };

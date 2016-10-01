@@ -21,14 +21,14 @@ var Enemy = function (group, data) {
     this.object = new createjs.Bitmap(preloader.get(this.attributes.sprite));
     this.group = group;
     this.shootingInterval = Math.random() * 10;
-    this.startingCell = game.cells[this.startingCell];
+    this.startingCell = game.cells[this.movement.start];
 
     this.calculateCurve();
   };
 
   this.calculateCurve = function () {
     var i;
-    var cellToMoveTo = game.cells[this.endingCell];
+    var cellToMoveTo = game.cells[this.movement.end];
 
     var originX, originY, targetX, targetY;
 
@@ -37,11 +37,11 @@ var Enemy = function (group, data) {
     // If spawning from the top
     if (this.startingCell.id <= 9) {
       originX = this.startingCell.x + (this.startingCell.w / 2);
-      originY = this.startingCell.y - (cellToMoveTo.h);
+      originY = this.startingCell.y - cellToMoveTo.h;
     } else if (this.startingCell.id <= 99 && this.startingCell.id >= 90) {
       // spawning from bottom cell
       originX = this.startingCell.x + (this.startingCell.w / 2);
-      originY = this.startingCell.y+ (this.startingCell.h * 2) - (this.object.image.height / 2);
+      originY = this.startingCell.y + (this.startingCell.h + 100) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '9') {
       // Cell ends in a 9 (right most cell)
       originX = game.width + 100;
@@ -57,33 +57,33 @@ var Enemy = function (group, data) {
     // If ending at the top
     if (this.startingCell.id <= 9) {
       targetX = cellToMoveTo.x + (cellToMoveTo.w / 2);
-      targetY = cellToMoveTo.y - (this.object.image.height / 2);
+      targetY = cellToMoveTo.y - cellToMoveTo.h;
     } else if (this.startingCell.id <= 99 && this.startingCell.id >= 90) {
       // If ending on the bottom
       targetX = cellToMoveTo.x + (cellToMoveTo.w / 2);
-      targetY = cellToMoveTo.y + cellToMoveTo.h - (this.object.image.height / 2);
+      targetY = cellToMoveTo.y + (cellToMoveTo.h + 100) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '9') {
       // If ending on the right
-      targetX = cellToMoveTo.x + cellToMoveTo.w;
+      targetX = game.width + 100;
       targetY = cellToMoveTo.y + (cellToMoveTo.h / 2) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '0') {
-      // If endingon the left
-      targetX = cellToMoveTo.x;
+      // If ending on the left
+      targetX = -100;
       targetY = cellToMoveTo.y + (cellToMoveTo.h / 2) - (this.object.image.height / 2);
     }
 
     this.object.x = originX;
     this.object.y = originY;
 
-    if (this.movesVia) {
+    if (this.movement.via) {
       var path = [
         originX, originY,
       ];
 
       var c;
-      for (c = 0; c < this.movesVia.length; ++c) {
-        var cell = game.cells[this.movesVia[c]];
-        path.push(cell.x, cell.y);
+      for (c = 0; c < this.movement.via.length; ++c) {
+        var cell = game.cells[this.movement.via[c]];
+        path.push(cell.x + (cell.w / 2), cell.y + (cell.h / 2) - (this.object.image.width / 2));
       }
 
       path.push(targetX, targetY);
