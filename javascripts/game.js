@@ -24,6 +24,14 @@ var Game = function () {
     for (x = 0; x < rows; ++x) {
       for (y = 0; y < columns; ++y) {
 
+        var cell = {
+          id: this.cells.length,
+          x: y * this.cellWidth,
+          y: x * this.cellHeight,
+          w: this.cellWidth,
+          h: this.cellHeight,
+        };
+        
         if (this.debugMode) {
           var graphics = new createjs.Graphics()
             .beginStroke('red')
@@ -43,13 +51,7 @@ var Game = function () {
           this.stage.addChild(shape, text);
         }
 
-        this.cells.push({
-          id: this.cells.length,
-          x: y * this.cellWidth,
-          y: x * this.cellHeight,
-          w: this.cellWidth,
-          h: this.cellHeight,
-        });
+        this.cells.push(cell);
       }
     }
   };
