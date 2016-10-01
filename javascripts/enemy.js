@@ -6,7 +6,6 @@ var Enemy = function (group, data) {
   }
   this.currentCell = {};
   this.curveStep = 0;
-  this.curveLUT = [];
   this.speed = 0;
 
   this.init = function () {
@@ -32,19 +31,19 @@ var Enemy = function (group, data) {
     // If spawning from the top
     if (this.startingCell.id <= 9) {
       originX = this.startingCell.x + (this.startingCell.w / 2);
-      originY = this.startingCell.y - (this.object.image.height / 2);
+      originY = this.startingCell.y - (cellToMoveTo.h);
     } else if (this.startingCell.id <= 99 && this.startingCell.id >= 90) {
       // spawning from bottom cell
       originX = this.startingCell.x + (this.startingCell.w / 2);
-      originY = this.startingCell.y - (this.object.image.height / 2) + this.startingCell.h;
+      originY = this.startingCell.y+ (this.startingCell.h * 2) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '9') {
       // Cell ends in a 9 (right most cell)
-      originX = this.startingCell.x + this.startingCell.w;
-      originY = originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
+      originX = game.width + 100;
+      originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '0') {
       // Cell ends in a 0 (left most cell)
-      originX = this.startingCell.x;
-      originY = originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
+      originX = -100;
+      originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
     }
 
     // Calculate ending bounds from end cell
@@ -82,9 +81,6 @@ var Enemy = function (group, data) {
     this.curve = new Bezier(path);
 
     this.speed = 8 / this.curve.length();
-    this.curveLUT = this.curve.getLUT(10);
-
-    console.log(this.curveLUT);
 
     if (game.debugMode) {
       var points = this.curve.points;
@@ -147,10 +143,10 @@ var Enemy = function (group, data) {
 
     // if this enemy is offscreen, remove it
     if (
-      this.object.x < -50 ||
-      this.object.y < -50 ||
-      this.object.y > game.height + 50 ||
-      this.object.x > game.width + 50
+      this.object.x < -150 ||
+      this.object.y < -150 ||
+      this.object.y > game.height + 150 ||
+      this.object.x > game.width + 150
     ) {
       this.destroy();
       return;
