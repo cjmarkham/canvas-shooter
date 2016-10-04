@@ -112,6 +112,10 @@ var Level = function (levelNumber) {
   };
 
   this.complete = function () {
+    if (game.player.dead) {
+      return;
+    }
+
     game.player.controllable = false;
     game.player.object.x += 20;
 

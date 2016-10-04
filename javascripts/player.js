@@ -40,6 +40,7 @@ var Player = function () {
   this.orb = undefined;
   this.respawning = false;
   this.starting = true;
+  this.dead = false;
 
   this.setLevel = function (level) {
     this.level = level;
@@ -93,6 +94,7 @@ var Player = function () {
   this.kill = function () {
     this.setLevel(1);
     this.controllable = false;
+    this.dead = true;
     this.object.x = -150;
     setTimeout(function () {
       this.respawning = true;
@@ -112,6 +114,7 @@ var Player = function () {
         this.respawning = false;
         this.starting = false;
         this.controllable = true;
+        this.dead = false;
       }
     }
 
