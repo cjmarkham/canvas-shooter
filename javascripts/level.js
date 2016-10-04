@@ -116,7 +116,7 @@ var Level = function (levelNumber) {
     game.player.object.x += 20;
 
     setTimeout(function () {
-      clearInterval(this.levelTimer);
+      clearInterval(this.levelTimerInterval);
       game.nextLevel();
     }.bind(this), 5000);
   };
