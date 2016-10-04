@@ -35,10 +35,11 @@ var Player = function () {
   };
   this.fireHeld = false;
   this.lastTimeFired = 0;
-  this.level = 2;
-  this.controllable = true;
+  this.level = 1;
+  this.controllable = false;
   this.orb = undefined;
   this.respawning = false;
+  this.starting = true;
 
   this.setLevel = function (level) {
     this.level = level;
@@ -99,16 +100,18 @@ var Player = function () {
   };
 
   this.update = function () {
-    if (this.respawning) {
-      this.object.alpha = (game.ticks % 4 === 0) ? 1 : 0;
+    if (this.respawning || this.starting) {
+      if (this.respawning) {
+        this.object.alpha = (game.ticks % 4 === 0) ? 1 : 0;
+      }
       this.object.x += 5;
       this.object.y = (game.height / 2) - (this.height / 2);
 
       if (this.object.x >= 100) {
         this.object.alpha = 1;
         this.respawning = false;
+        this.starting = false;
         this.controllable = true;
-        // this.hp = 1;
       }
     }
 

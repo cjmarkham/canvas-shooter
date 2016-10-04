@@ -7,6 +7,7 @@ var Game = function () {
   this.player = null;
   this.ticks = 0;
   this.score = 0;
+  this.levelIndex = 0;
   this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1;
   // this.debugMode = false;
   this.cells = [];
@@ -92,8 +93,20 @@ var Game = function () {
       this.explosionLayer.container
     );
 
-    this.level = new Level(1);
+    this.loadLevel();
+  };
+
+  this.loadLevel = function () {
+    this.level = new Level(this.levelIndex);
     this.level.start();
+  };
+
+  this.nextLevel = function () {
+    this.levelIndex++;
+    if ( ! levels[this.levelIndex]) {
+      return;
+    }
+    this.loadLevel();
   };
 
   this.keyDown = function (e) {

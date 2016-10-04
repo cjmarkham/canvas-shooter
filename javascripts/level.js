@@ -10,12 +10,23 @@ var Level = function (levelNumber) {
   this.enemyGroups = [];
   this.spawnedEnemyGroups = {};
   this.levelTimer = 0;
+  this.levelData = {};
+  this.enemiesSpawned = 0;
 
   this.start = function () {
+    game.player.object.x = -150;
+    game.player.object.y = ((game.height / 2) - (game.player.height / 2));
+    game.player.starting = true;
+
     this.initBackground();
-    this.enemyGroupsData = levels[levelNumber - 1];
+    this.levelData = levels[this.levelNumber];
+    this.enemyGroupsData = this.levelData.groups;
 
     this.createEnemyGroups();
+
+    if (game.debugMode) {
+      $('#level-number span').text(this.levelNumber + 1);
+    }
 
     this.levelTimerInterval = setInterval(function () {
       // used for enemy spawn timing
@@ -26,23 +37,16 @@ var Level = function (levelNumber) {
     }.bind(this), 500);
   };
 
-  this.complete = function () {
-    clearInterval(this.levelTimer);
-  };
-
   this.createEnemyGroups = function () {
     var i;
-    var totalEnemies = 0;
     for (i = 0; i < this.enemyGroupsData.length; ++i) {
       var enemyGroupData = this.enemyGroupsData[i];
       var group = new EnemyGroup(enemyGroupData);
       this.enemyGroups.push(group);
-
-      totalEnemies += group.enemies.length;
     }
 
     if (game.debugMode) {
-      $('#enemies span').text(totalEnemies);
+      $('#enemies span').text(this.levelData.totalEnemies);
     }
   };
 
@@ -70,6 +74,7 @@ var Level = function (levelNumber) {
             this.spawnedEnemyGroups[group.id] = [];
           }
           this.spawnedEnemyGroups[group.id].push(enemy);
+          this.enemiesSpawned++;
         }
       }
     }
@@ -90,6 +95,30 @@ var Level = function (levelNumber) {
     this.checkCollisions();
     this.updateBullets();
     this.updatePowerups();
+    this.checkLevelComplete();
+  };
+
+  this.checkLevelComplete = function () {
+    if (this.levelData.hasBoss) {
+      // Boss kill will trigger next level
+      return;
+    }
+
+    if (this.enemiesSpawned === this.levelData.totalEnemies) {
+      if (game.enemiesLayer.entities.length === 0) {
+        this.complete();
+      }
+    }
+  };
+
+  this.complete = function () {
+    game.player.controllable = false;
+    game.player.object.x += 20;
+
+    setTimeout(function () {
+      clearInterval(this.levelTimer);
+      game.nextLevel();
+    }.bind(this), 5000);
   };
 
   this.updatePowerups = function () {
