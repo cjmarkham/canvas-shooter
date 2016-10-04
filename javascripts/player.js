@@ -26,7 +26,7 @@ var Player = function () {
   this.object.scaleY = 0.3;
   this.object.x = this.width / 2;
   this.object.y = ((game.height / 2) - (this.height / 2));
-  this.lives = 1;
+  this.lives = 3;
   this.inRespawnAnimation = false;
   this.moving = {
     left: false,
