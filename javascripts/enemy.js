@@ -36,19 +36,19 @@ var Enemy = function (group, data) {
 
     // If spawning from the top
     if (this.startingCell.id <= 9) {
-      originX = this.startingCell.x + (this.startingCell.w / 2);
-      originY = this.startingCell.y - cellToMoveTo.h;
+      originX = this.startingCell.x + (this.startingCell.w / 2) - (this.object.image.width / 2);
+      originY = this.startingCell.y - (this.object.image.height / 2);
     } else if (this.startingCell.id <= 99 && this.startingCell.id >= 90) {
       // spawning from bottom cell
-      originX = this.startingCell.x - (this.startingCell.w / 2) + (this.object.image.width / 2);
-      originY = this.startingCell.y + (this.startingCell.h + 100) - (this.object.image.height / 2);
+      originX = this.startingCell.x + (this.startingCell.w / 2) - (this.object.image.width / 2);
+      originY = this.startingCell.y + (this.startingCell.h) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '9') {
       // Cell ends in a 9 (right most cell)
-      originX = game.width + 100;
+      originX = game.width;
       originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '0') {
       // Cell ends in a 0 (left most cell)
-      originX = -100;
+      originX = 0;
       originY = this.startingCell.y + (this.startingCell.h / 2) - (this.object.image.height / 2);
     }
 
@@ -57,18 +57,18 @@ var Enemy = function (group, data) {
     // If ending at the top
     if (this.startingCell.id <= 9) {
       targetX = cellToMoveTo.x + (cellToMoveTo.w / 2) + (this.object.image.width / 2);
-      targetY = cellToMoveTo.y - cellToMoveTo.h;
+      targetY = cellToMoveTo.y - (this.object.image.height / 2);
     } else if (this.startingCell.id <= 99 && this.startingCell.id >= 90) {
       // If ending on the bottom
-      targetX = cellToMoveTo.x + (cellToMoveTo.w / 2) + (this.object.image.width / 2) + (cellToMoveTo.w / 2);
-      targetY = cellToMoveTo.y + (cellToMoveTo.h + 100) - (this.object.image.height / 2);
+      targetX = cellToMoveTo.x + (cellToMoveTo.w / 2) + (this.object.image.width / 2);
+      targetY = cellToMoveTo.y + (cellToMoveTo.h) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '9') {
       // If ending on the right
-      targetX = game.width + 100;
+      targetX = game.width;
       targetY = cellToMoveTo.y + (cellToMoveTo.h / 2) - (this.object.image.height / 2);
     } else if (this.startingCell.id.toString()[1] === '0') {
       // If ending on the left
-      targetX = -100;
+      targetX = 0;
       targetY = cellToMoveTo.y + (cellToMoveTo.h / 2) - (this.object.image.height / 2);
     }
 
@@ -164,6 +164,10 @@ var Enemy = function (group, data) {
       this.shootingInterval = Math.random() * 40;
     }
 
+    this.destroyIfOffScreen();
+  };
+
+  this.destroyIfOffScreen = function () {
     // if this enemy is offscreen, remove it
     if (
       this.object.x < -110 ||
