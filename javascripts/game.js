@@ -165,10 +165,12 @@ var Game = function () {
 
     this.ticks++;
 
-    this.player.update();
+    if ( ! this.player.dead) {
+      this.player.update();
+    }
     this.level.update();
-    this.stage.update();
     this.enemiesLayer.update();
+    this.stage.update();
 
     $('#fps span').text(Math.floor(createjs.Ticker.getMeasuredFPS()));
   };
@@ -176,5 +178,20 @@ var Game = function () {
   this.updateScore = function (number) {
     this.score += number;
     document.getElementById('score').innerText = Utils.pad(this.score, 8);
+  };
+
+  this.gameOver = function () {
+    setTimeout(function () {
+      $('#game-over').fadeIn();
+      this.reset();
+    }.bind(this), 2000);
+  };
+
+  this.reset = function () {
+    this.paused = false;
+    // this.player = null;
+    this.ticks = 0;
+    this.score = 0;
+    this.levelIndex = 0;
   };
 };

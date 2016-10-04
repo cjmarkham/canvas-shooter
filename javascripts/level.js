@@ -112,7 +112,7 @@ var Level = function (levelNumber) {
   };
 
   this.complete = function () {
-    if (game.player.dead) {
+    if (game.player.inRespawnAnimation || game.player.dead) {
       return;
     }
 
@@ -188,8 +188,9 @@ var Level = function (levelNumber) {
     for (i = 0; i < game.enemiesLayer.entities.length; ++i) {
       var enemy = game.enemiesLayer.entities[i];
 
-      if ( ! game.player.respawning) {
+      if ( ! game.player.inRespawnAnimation && ! game.player.dead) {
         if (ndgmr.checkPixelCollision(enemy.object, game.player.object)) {
+          console.log('enemy collision with player');
           new Explosion(enemy.object.x, enemy.object.y);
           game.player.takeDamage();
           enemy.kill();
@@ -223,35 +224,36 @@ var Level = function (levelNumber) {
     }
 
     // check enemy bullet collisions with the player
-    var k;
-    for (k = 0; k < game.enemyBulletLayer.entities.length; ++k) {
-      var enemyBullet = game.enemyBulletLayer.entities[k];
+    if ( ! game.player.dead && ! game.player.inRespawnAnimation) {
+      var k;
+      for (k = 0; k < game.enemyBulletLayer.entities.length; ++k) {
+        var enemyBullet = game.enemyBulletLayer.entities[k];
 
-      if ( ! game.player.respawning) {
         if (ndgmr.checkPixelCollision(enemyBullet.object, game.player.object)) {
+          console.log('enemy bullet collision with player');
           new Explosion(game.player.object.x, game.player.object.y);
           game.player.takeDamage(10);
           enemyBullet.kill();
         }
-      }
 
-      // check enemy bullet collisions with player orbs
-      if (game.player.orb) {
-        if (ndgmr.checkPixelCollision(enemyBullet.object, game.player.orb.object)) {
-          new Explosion(game.player.orb.object.x, game.player.orb.object.y);
-          game.player.orb.kill();
+        // check enemy bullet collisions with player orbs
+        if (game.player.orb) {
+          if (ndgmr.checkPixelCollision(enemyBullet.object, game.player.orb.object)) {
+            new Explosion(game.player.orb.object.x, game.player.orb.object.y);
+            game.player.orb.kill();
+          }
         }
       }
-    }
 
-    // check player collisions with powerups
-    var l;
-    for (l = 0; l < game.powerupsLayer.entities.length; ++l) {
-      var powerup = game.powerupsLayer.entities[l];
+      // check player collisions with powerups
+      var l;
+      for (l = 0; l < game.powerupsLayer.entities.length; ++l) {
+        var powerup = game.powerupsLayer.entities[l];
 
-      if ( ! game.player.respawning) {
-        if (ndgmr.checkPixelCollision(powerup.object, game.player.object)) {
-          powerup.collect();
+        if ( ! game.player.inRespawnAnimation) {
+          if (ndgmr.checkPixelCollision(powerup.object, game.player.object)) {
+            powerup.collect();
+          }
         }
       }
     }

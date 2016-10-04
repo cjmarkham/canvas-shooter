@@ -26,7 +26,8 @@ var Player = function () {
   this.object.scaleY = 0.3;
   this.object.x = this.width / 2;
   this.object.y = ((game.height / 2) - (this.height / 2));
-  this.hp = 1;
+  this.lives = 1;
+  this.inRespawnAnimation = false;
   this.moving = {
     left: false,
     right: false,
@@ -80,22 +81,27 @@ var Player = function () {
   };
 
   this.takeDamage = function (damage) {
-    // this.hp -= damage;
-    this.setLevel(1);
     if (this.orb) {
       this.orb.kill();
     }
 
-    // if (this.hp <= 0) {
-      this.kill();
-    // }
+    this.kill();
   };
 
   this.kill = function () {
+    this.lives--;
+
+    if (this.lives === 0) {
+      this.dead = true;
+      game.playerLayer.removeChild(this);
+      game.gameOver();
+      return;
+    }
+
     this.setLevel(1);
     this.controllable = false;
-    this.dead = true;
     this.object.x = -150;
+    this.inRespawnAnimation = true;
     setTimeout(function () {
       this.respawning = true;
     }.bind(this), 1000);
@@ -112,9 +118,9 @@ var Player = function () {
       if (this.object.x >= 100) {
         this.object.alpha = 1;
         this.respawning = false;
+        this.inRespawnAnimation = false;
         this.starting = false;
         this.controllable = true;
-        this.dead = false;
       }
     }
 
