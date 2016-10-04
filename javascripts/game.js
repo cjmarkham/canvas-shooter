@@ -99,6 +99,7 @@ var Game = function () {
   this.loadLevel = function () {
     this.level = new Level(this.levelIndex);
     this.level.start();
+    $('#level-text').text('Level ' + (this.levelIndex + 1)).fadeIn().delay(1000).fadeOut();
   };
 
   this.nextLevel = function () {
