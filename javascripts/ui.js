@@ -77,13 +77,34 @@ var Ui = function () {
   };
 
   this.renderShop = function () {
+    var i;
+    for (i in specials) {
+      var special = specials[i];
+      var element = $('<div class="special" />');
+      element.attr('data-name', special.name);
+      element.attr('data-cost', special.cost);
+      var title = $('<p />');
+      title.text(special.name + ' (' + special.ammo + ')');
+      var cost = $('<p />');
+      cost.text('$' + special.cost);
+      var description = $('<p />');
+      description.text(special.description);
+
+      element.append(title, cost, description);
+
+      if (game.money < special.cost) {
+        element.addClass('disabled');
+      }
+
+      $('#shop').append(element);
+    }
     $('#shop').show();
 
-    $('.special').on('click', function () {
+    $('.special:not(.disabled)').on('click', function () {
       $('#shop').fadeOut();
       $('#hud').fadeIn();
       var special = $(this).attr('data-name');
-      game.specialChosen(special);
+      game.shop.specialChosen(special);
     });
   };
 };

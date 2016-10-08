@@ -12,5 +12,9 @@ var Special = function (name) {
     }
   };
 
+  this.refillAmmo = function () {
+    this.ammo = this.attributes.ammo;
+  };
+
   return this;
 };

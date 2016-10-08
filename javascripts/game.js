@@ -7,9 +7,10 @@ var Game = function () {
   this.player = null;
   this.ticks = 0;
   this.score = 0;
-  this.money = 0;
+  this.money = 1000;
   this.levelIndex = 0;
-  this.ui = undefined;
+  this.ui = null;
+  this.shop = null;
   // this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1;
   this.debugMode = false;
   this.cells = [];
@@ -99,18 +100,14 @@ var Game = function () {
       this.explosionLayer.container
     );
 
-    this.ui.renderShop();
+    this.shop = new Shop();
+    this.shop.render();
   };
 
   this.loadLevel = function () {
     this.playerLayer.addChild(this.player);
     this.level = new Level(this.levelIndex);
     this.level.load();
-  };
-
-  this.specialChosen = function (special) {
-    this.player.special = new Special(special);
-    this.loadLevel();
   };
 
   this.nextLevel = function () {
