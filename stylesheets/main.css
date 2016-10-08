@@ -41,6 +41,7 @@ html, body {
 
 #score-wrapper {
   width: 150px;
+  margin-right: 40px;
 }
 
 #score-wrapper h3 {
@@ -62,7 +63,7 @@ html, body {
   width: 150px;
 }
 
-#hud #money h3 {
+#hud .money h3 {
   margin-bottom: 0;
   margin-top: 5px;
   display: inline-block;
@@ -84,7 +85,7 @@ html, body {
   margin-top: 15px;
 }
 
-#hud #money span {
+#hud .money span {
   float: right;
   margin-top: 5px;
 }
