@@ -1,15 +1,17 @@
 var Game = function () {
   this.stage = null;
   this.canvas = null;
-  this.width = 1280;
-  this.height = 600;
+  this.width = 1024;
+  this.height = 650;
   this.paused = false;
   this.player = null;
   this.ticks = 0;
   this.score = 0;
+  this.money = 0;
   this.levelIndex = 0;
-  this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1;
-  // this.debugMode = false;
+  this.ui = undefined;
+  // this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1;
+  this.debugMode = false;
   this.cells = [];
   this.grid = new createjs.Container();
   createjs.MotionGuidePlugin.install();
@@ -66,40 +68,49 @@ var Game = function () {
     this.stage = new createjs.Stage(this.canvas);
     this.createGrid();
 
-    this.player = new Player();
-
     this.playerLayer = new Layer();
     this.enemiesLayer = new Layer();
     this.playerBulletLayer = new Layer();
+    this.playerSpecialLayer = new Layer();
     this.enemyBulletLayer = new Layer();
     this.explosionLayer = new Layer();
     this.powerupsLayer = new Layer();
     this.orbsLayer = new Layer();
+    this.backgroundLayer = new Layer();
 
-    this.playerLayer.addChild(this.player);
+    this.ui = new Ui();
+    this.input = new Input();
+    this.player = new Player();
 
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener('tick', this.tick.bind(this));
-    document.addEventListener('keydown', this.keyDown.bind(this));
-    document.addEventListener('keyup', this.keyUp.bind(this));
+    $(document.body).on('keydown', this.input.keyPress.bind(this.input));
+    $(document.body).on('keyup', this.input.keyPress.bind(this.input));
 
     this.stage.addChild(
+      this.backgroundLayer.container,
       this.playerLayer.container,
       this.enemiesLayer.container,
       this.playerBulletLayer.container,
+      this.playerSpecialLayer.container,
       this.enemyBulletLayer.container,
       this.powerupsLayer.container,
       this.orbsLayer.container,
       this.explosionLayer.container
     );
 
-    this.loadLevel();
+    this.ui.renderShop();
   };
 
   this.loadLevel = function () {
+    this.playerLayer.addChild(this.player);
     this.level = new Level(this.levelIndex);
-    this.level.start();
-    $('#level-text').text('Level ' + (this.levelIndex + 1)).fadeIn().delay(1000).fadeOut();
+    this.level.load();
+  };
+
+  this.specialChosen = function (special) {
+    this.player.special = new Special(special);
+    this.loadLevel();
   };
 
   this.nextLevel = function () {
@@ -108,55 +119,6 @@ var Game = function () {
       return;
     }
     this.loadLevel();
-  };
-
-  this.keyDown = function (e) {
-    // P pressed
-    if (e.keyCode === 80) {
-      this.paused = ! this.paused;
-    }
-
-    switch (e.keyCode) {
-      case 37:
-        this.player.moving.left = true;
-        this.player.moving.right = false;
-        break;
-      case 38:
-        this.player.moving.up = true;
-        this.player.moving.down = false;
-        break;
-      case 39:
-        this.player.moving.right = true;
-        this.player.moving.left = false;
-        break;
-      case 40:
-        this.player.moving.down = true;
-        this.player.moving.up = false;
-        break;
-      case 32:
-        this.player.fireHeld = true;
-        break;
-    }
-  };
-
-  this.keyUp = function (e) {
-    switch (e.keyCode) {
-      case 37:
-        this.player.moving.left = false;
-        break;
-      case 38:
-        this.player.moving.up = false;
-        break;
-      case 39:
-        this.player.moving.right = false;
-        break;
-      case 40:
-        this.player.moving.down = false;
-        break;
-      case 32:
-        this.player.fireHeld = false;
-        break;
-    }
   };
 
   this.tick = function () {
@@ -169,8 +131,10 @@ var Game = function () {
     if ( ! this.player.dead) {
       this.player.update();
     }
-    this.level.update();
-    this.enemiesLayer.update();
+    if (this.level) {
+      this.level.update();
+      this.enemiesLayer.update();
+    }
     this.stage.update();
 
     $('#fps span').text(Math.floor(createjs.Ticker.getMeasuredFPS()));
@@ -178,19 +142,23 @@ var Game = function () {
 
   this.updateScore = function (number) {
     this.score += number;
-    document.getElementById('score').innerText = Utils.pad(this.score, 8);
+    this.ui.updateScore();
+  };
+
+  this.updateMoney = function (number) {
+    this.money += number;
+    this.ui.updateMoney();
   };
 
   this.gameOver = function () {
     setTimeout(function () {
-      $('#game-over').fadeIn();
+      this.ui.renderGameOver();
       this.reset();
     }.bind(this), 2000);
   };
 
   this.reset = function () {
     this.paused = false;
-    // this.player = null;
     this.ticks = 0;
     this.score = 0;
     this.levelIndex = 0;

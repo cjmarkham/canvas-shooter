@@ -10,14 +10,14 @@ var PowerUp = function (x, y) {
     if (this.object.x <= 0) {
       this.destroy();
     }
-  }
+  };
 
   this.collect = function () {
-    game.player.levelUp();
+    game.player.powerUp();
     this.destroy();
-  }
+  };
 
   this.destroy = function () {
     game.powerupsLayer.removeChild(this);
-  }
-}
+  };
+};

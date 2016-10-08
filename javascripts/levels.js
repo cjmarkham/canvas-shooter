@@ -24,7 +24,7 @@ var PATTERNS = {
 var levels = [
   // level 1
   {
-    totalEnemies: 4,
+    totalEnemies: 2,
     hasBoss: false,
     groups: [
       // group 1
@@ -36,34 +36,34 @@ var levels = [
             spawnTime: 2.0, // seconds
             type: 'orb',
             movement: {
-              start: 19,
-              end: 10,
+              start: 29,
+              end: 20,
             }
           },
-          {
-            spawnTime: 3.0, // seconds
-            type: 'orb',
-            movement: {
-              start: 19,
-              end: 10,
-            }
-          },
-          {
-            spawnTime: 4.0, // seconds
-            type: 'orb',
-            movement: {
-              start: 19,
-              end: 10,
-            }
-          },
-          {
-            spawnTime: 5.0, // seconds
-            type: 'orb',
-            movement: {
-              start: 19,
-              end: 10,
-            }
-          },
+          // {
+          //   spawnTime: 3.0, // seconds
+          //   type: 'orb',
+          //   movement: {
+          //     start: 29,
+          //     end: 20,
+          //   }
+          // },
+          // {
+          //   spawnTime: 4.0, // seconds
+          //   type: 'orb',
+          //   movement: {
+          //     start: 29,
+          //     end: 20,
+          //   }
+          // },
+          // {
+          //   spawnTime: 5.0, // seconds
+          //   type: 'orb',
+          //   movement: {
+          //     start: 29,
+          //     end: 20,
+          //   }
+          // },
         ],
       },
       // // group 2

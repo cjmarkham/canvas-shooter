@@ -6,7 +6,7 @@ var Player = function () {
   this.height = 256 * 0.3;
 
   var spritesheet = new createjs.SpriteSheet({
-    images: [preloader.get('playerPlane3')],
+    images: [preloader.get('playerPlane')],
     frames: {
       width: 480,
       height: 256,
@@ -40,14 +40,15 @@ var Player = function () {
   this.controllable = false;
   this.orb = undefined;
   this.respawning = false;
-  this.starting = true;
+  this.starting = false;
   this.dead = false;
+  this.special = null;
 
   this.setLevel = function (level) {
     this.level = level;
   };
 
-  this.levelUp = function () {
+  this.powerUp = function () {
     this.level++;
 
     if (this.level > MAX_LEVEL) {
@@ -78,6 +79,13 @@ var Player = function () {
 
       this.lastTimeFired = new Date().getTime();
     }
+  };
+
+  this.shootSpecial = function () {
+    if ( ! this.controllable || this.respawning) {
+      return;
+    }
+    this.special.shoot();
   };
 
   this.takeDamage = function (damage) {
@@ -147,8 +155,8 @@ var Player = function () {
         this.object.x = game.width - this.width;
       }
 
-      if (this.object.y <= this.height / 2) {
-        this.object.y = this.height / 2;
+      if (this.object.y <= (this.height / 2) + 100) {
+        this.object.y = (this.height / 2) + 100;
       }
 
       if (this.object.y >= game.height - (this.height / 2)) {

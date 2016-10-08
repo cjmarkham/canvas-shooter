@@ -4,7 +4,6 @@ var Enemy = function (group, data) {
   for (i = 0; i < keys.length; ++i) {
     this[keys[i]] = data[keys[i]];
   }
-  this.currentCell = {};
   this.curveStep = 0;
   this.speed = 0;
   this.isSpawned = false;
@@ -197,6 +196,8 @@ var Enemy = function (group, data) {
 
   this.kill = function () {
     game.updateScore(this.attributes.value);
+    game.updateMoney(this.attributes.worth);
+    game.level.enemiesKilled++;
     // update the enemy attributes in the group
     // to show that it was killed
     var index = game.level.spawnedEnemyGroups[this.group.id].findIndex(function (enemy) {

@@ -1,18 +1,11 @@
 var Preloader = function () {
 
   this.queue = new createjs.LoadQueue();
+  this.queue.installPlugin(createjs.Sound);
   this.queue.loadManifest([
     {
       id: 'playerPlane',
       src: 'images/sprites/player-plane.png',
-    },
-    {
-      id: 'playerPlane2',
-      src: 'images/sprites/player-plane2.png',
-    },
-    {
-      id: 'playerPlane3',
-      src: 'images/sprites/player-plane3.png',
     },
     {
       id: 'bullet1',
@@ -54,6 +47,10 @@ var Preloader = function () {
       id: 'orb',
       src: 'images/sprites/orb.png',
     },
+    {
+      id: 'bomb',
+      src: 'images/sprites/bullet5.png',
+    },
   ]);
 
   this.queue.on('progress', function (progress) {
@@ -61,7 +58,7 @@ var Preloader = function () {
     $('#loading #progress-bar').css({
       width: percentage + '%'
     });
-  })
+  });
 
   this.queue.on('complete', function () {
     $('#loading').fadeOut(10);
@@ -70,5 +67,5 @@ var Preloader = function () {
 
   this.get = function (id) {
     return this.queue.getResult(id);
-  }
-}
+  };
+};

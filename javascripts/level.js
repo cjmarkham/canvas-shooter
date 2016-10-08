@@ -2,9 +2,6 @@ var Level = function (levelNumber) {
   this.levelNumber = levelNumber;
   this.background = document.getElementById('background-canvas');
   this.backgroundContext = this.background.getContext('2d');
-  this.stars = [];
-  this.starColors = ['#555', '#aaa', '#fff'];
-  this.starSpeeds = [2, 4, 8];
   this.timer = 0;
   this.enemyGroupsData = [];
   this.enemyGroups = [];
@@ -12,8 +9,30 @@ var Level = function (levelNumber) {
   this.levelTimer = 0;
   this.levelData = {};
   this.enemiesSpawned = 0;
+  this.bgmInstance = undefined;
+  this.soundEffects = {};
+  this.enemiesKilled = 0;
+  this.isComplete = false;
+  this.started = false;
+
+  this.load = function () {
+    console.log('Level:Load');
+    if ( ! game.debugMode) {
+      // var config = new createjs.PlayPropsConfig().set({
+      //   loop: -1,
+      // });
+      // this.bgmInstance = createjs.Sound.play('level-' + this.levelNumber + '-bgm', config);
+      // this.bgmInstance.volume = 0.3;
+    }
+
+    game.ui.updateSpecialAmmo(game.player.special.attributes.ammo);
+    game.ui.renderOpeningLevelText();
+
+    this.start();
+  };
 
   this.start = function () {
+    console.log('Level:Start');
     game.player.object.x = -150;
     game.player.object.y = ((game.height / 2) - (game.player.height / 2));
     game.player.starting = true;
@@ -27,6 +46,9 @@ var Level = function (levelNumber) {
     if (game.debugMode) {
       $('#level-number span').text(this.levelNumber + 1);
     }
+
+    this.started = true;
+    game.player.starting = true;
 
     this.levelTimerInterval = setInterval(function () {
       // used for enemy spawn timing
@@ -48,6 +70,16 @@ var Level = function (levelNumber) {
     if (game.debugMode) {
       $('#enemies span').text(this.levelData.totalEnemies);
     }
+  };
+
+  this.calculateEndingRewards = function () {
+    var points = 1000;
+    var money = 1000;
+
+    return {
+      points: points,
+      money: money,
+    };
   };
 
   this.spawnEnemies = function () {
@@ -89,12 +121,13 @@ var Level = function (levelNumber) {
   };
 
   this.update = function () {
-    this.spawnEnemies();
     this.updateBackground();
     this.updateExplosions();
     this.checkCollisions();
     this.updateBullets();
+    this.updateSpecials();
     this.updatePowerups();
+    this.spawnEnemies();
     this.checkLevelComplete();
   };
 
@@ -111,18 +144,33 @@ var Level = function (levelNumber) {
     }
   };
 
+  this.completeAnimation = function () {
+    game.player.controllable = false;
+    game.player.object.x += 20;
+  };
+
   this.complete = function () {
     if (game.player.inRespawnAnimation || game.player.dead) {
       return;
     }
 
-    game.player.controllable = false;
-    game.player.object.x += 20;
+    this.completeAnimation();
 
-    setTimeout(function () {
-      clearInterval(this.levelTimerInterval);
-      game.nextLevel();
-    }.bind(this), 5000);
+    if ( ! this.isComplete) {
+      this.isComplete = true;
+      game.ui.renderEndLevelStats();
+
+      if ( ! game.debugMode) {
+        this.bgmInstance.stop();
+        this.levelCompleteBgm = createjs.Sound.play('level-complete-bgm');
+        this.levelCompleteBgm.volume = 0.3;
+      }
+
+      setTimeout(function () {
+        clearInterval(this.levelTimerInterval);
+        game.nextLevel();
+      }.bind(this), 6000);
+    }
   };
 
   this.updatePowerups = function () {
@@ -147,39 +195,20 @@ var Level = function (levelNumber) {
     }
   };
 
-  this.initBackground = function () {
-    this.background.width = game.width;
-    this.background.height = game.height;
+  this.updateSpecials = function () {
     var i;
-    for (i = 0; i < 250; ++i) {
-      var randomNumber = Math.floor(Math.random() * 3);
-      var star = {
-        x: Math.floor(Math.random() * game.width),
-        y: Math.floor(Math.random() * game.height),
-        speed: this.starSpeeds[randomNumber],
-      };
-      this.stars.push(star);
+    for (i = 0; i < game.playerSpecialLayer.entities.length; ++i) {
+      var special = game.playerSpecialLayer.entities[i];
+      special.update();
     }
   };
 
+  this.initBackground = function () {
+
+  };
+
   this.updateBackground = function () {
-    this.backgroundContext.fillStyle = 'black';
-    this.backgroundContext.fillRect(0, 0, game.width, game.height);
 
-    var i;
-    for (i = 0; i < this.stars.length; ++i) {
-      var star = this.stars[i];
-      star.x -= star.speed;
-
-      if (star.x <= 0) {
-        star.x = game.width;
-        star.y = Math.floor(Math.random() * game.height);
-      }
-
-      var randomNumber = Math.floor(Math.random() * 3);
-      this.backgroundContext.fillStyle = this.starColors[randomNumber];
-      this.backgroundContext.fillRect(star.x, star.y, 1, 1);
-    }
   };
 
   this.checkCollisions = function () {
@@ -190,7 +219,6 @@ var Level = function (levelNumber) {
 
       if ( ! game.player.inRespawnAnimation && ! game.player.dead) {
         if (ndgmr.checkPixelCollision(enemy.object, game.player.object)) {
-          console.log('enemy collision with player');
           new Explosion(enemy.object.x, enemy.object.y);
           game.player.takeDamage();
           enemy.kill();
@@ -210,6 +238,24 @@ var Level = function (levelNumber) {
           new Explosion(enemy.object.x, enemy.object.y);
           enemy.kill();
           // bullet.kill();
+        }
+      }
+
+      // check special collisions with the enemy
+      var specialIndex;
+      for (specialIndex = 0; specialIndex < game.playerSpecialLayer.entities.length; ++specialIndex) {
+        var special = game.playerSpecialLayer.entities[specialIndex];
+
+        if (special.x > game.width) {
+          continue;
+        }
+
+        if (ndgmr.checkPixelCollision(special.object, enemy.object)) {
+          new Explosion(enemy.object.x, enemy.object.y);
+          enemy.kill();
+          if (special.attributes.destroyedOnImpact) {
+            special.destroy();
+          }
         }
       }
 

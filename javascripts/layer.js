@@ -11,7 +11,7 @@ var Layer = function () {
     if (child.hasOwnProperty('object')) {
       this.container.addChild(child.object);
     }
-  }
+  };
 
   this.removeChild = function (child) {
     var index = this.entities.findIndex(function (entity) {
@@ -20,7 +20,7 @@ var Layer = function () {
 
     this.entities.splice(index, 1);
     this.container.removeChild(child.object);
-  }
+  };
 
   this.update = function () {
     var i;
@@ -28,7 +28,7 @@ var Layer = function () {
       var entity = this.entities[i];
       entity.update();
     }
-  }
+  };
 
   return this;
-}
+};

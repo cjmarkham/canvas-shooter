@@ -3,6 +3,7 @@
   <meta charset="utf-8" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script>
   <script src="https://code.createjs.com/tweenjs-0.6.2.min.js"></script>
   <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
   <script src="https://code.createjs.com/preloadjs-0.6.2.min.js"></script>
@@ -19,7 +20,6 @@
 <div id="game-over">
   <h2>GAME OVER!</h2>
 </div>
-<div id="score">00000000</div>
 <div id="debug">
   <div id="timer">Timer <span>0</span></div>
   <div id="fps">FPS <span>0</span></div>
@@ -27,6 +27,55 @@
   <div id="level-number">Level <span>0</span></div>
 </div>
 <div id="wrapper">
+  <div id="end-level">
+    <div id="score">
+      <h1>PTS</h1>
+      <span>0</span>
+    </div>
+    <div id="money">
+      <h1>$</h1>
+      <span>0</span>
+    </div>
+  </div>
+  <div id="hud">
+    <div id="score-wrapper">
+      <h3>SCORE</h3>
+      <div id="score">
+        <span>0</span>
+      </div>
+    </div>
+    <div>
+      <div id="plane-level">
+        <h3>Level</h3>
+        <span>1</span>
+      </div>
+      <div id="money">
+        <h3>$</h3>
+        <span>0</span>
+      </div>
+    </div>
+    <div id="special-ammo-wrapper">
+      <h3>Special Ammo</h3>
+      <div id="special-ammo">
+        <span>10</span>
+      </div>
+    </div>
+  </div>
+  <div id="shop">
+    <h1>Choose a special weapon</h1>
+    <div class="special" data-name="Bomb">
+      Bomb (10)
+      <p>
+        A bomb which can be dropped on to enemies
+      </p>
+    </div>
+    <div class="special" data-name="Beam">
+      Beam (5)
+      <p>
+        A beam which cuts through all enemies
+      </p>
+    </div>
+  </div>
   <canvas id="background-canvas" width="600" height="400"></canvas>
   <canvas id="main-canvas" width="600" height="400"></canvas>
 </div>
@@ -46,6 +95,12 @@
 <script src="javascripts/enemy.js"></script>
 <script src="javascripts/enemy_group.js"></script>
 <script src="javascripts/powerup.js"></script>
+<script src="javascripts/specials/index.js"></script>
+<script src="javascripts/specials/bomb.js"></script>
+<script src="javascripts/specials/beam.js"></script>
+<script src="javascripts/special.js"></script>
+<script src="javascripts/input.js"></script>
+<script src="javascripts/ui.js"></script>
 <script src="javascripts/level.js"></script>
 <script src="javascripts/game.js"></script>
 <script>

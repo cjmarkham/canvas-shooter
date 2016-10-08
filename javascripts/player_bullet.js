@@ -10,9 +10,9 @@ var PlayerBullet = function (player) {
     if (this.object.x > (game.width + this.object.image.width)) {
       this.kill();
     }
-  }
+  };
 
   this.kill = function () {
     game.playerBulletLayer.removeChild(this);
   };
-}
+};
