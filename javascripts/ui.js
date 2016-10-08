@@ -37,7 +37,7 @@ var Ui = function () {
   };
 
   this.trickleMoney = function() {
-    var currentMoney = parseInt($('#hud #money span').text(), 10);
+    var currentMoney = parseInt($('#hud .money span').text(), 10);
     var amount = 10;
 
     if (this.moneyToAward - amount < 0) {
@@ -45,7 +45,7 @@ var Ui = function () {
     }
     currentMoney += amount;
     this.moneyToAward -= amount;
-    $('#hud #money span').text(currentMoney);
+    $('#hud .money span').text(currentMoney);
     $('#end-level #money span').text(this.moneyToAward);
 
     if (this.moneyToAward > 0) {
