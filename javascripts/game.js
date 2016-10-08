@@ -80,6 +80,7 @@ var Game = function () {
     this.backgroundLayer = new Layer();
 
     this.ui = new Ui();
+    this.ui.init();
     this.input = new Input();
     this.player = new Player();
 

@@ -1,4 +1,8 @@
 var Ui = function () {
+  this.init = function () {
+    this.updateMoney();
+  };
+
   this.renderOpeningLevelText = function () {
     $('#level-text').text('Level ' + (game.levelIndex + 1)).fadeIn().delay(1000).fadeOut();
   };
@@ -8,7 +12,7 @@ var Ui = function () {
   };
 
   this.updateMoney = function () {
-    $('#hud #money span').text(game.money);
+    $('.money span').text(game.money);
   };
 
   this.renderGameOver = function () {
