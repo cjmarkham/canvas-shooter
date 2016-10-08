@@ -21,7 +21,7 @@ var Input = function () {
         }
       break;
       case 'space':
-        game.player.shoot();
+        game.player.fireHeld = keyMap[key];
       break;
       case 'p':
         game.paused = ! game.paused;
