@@ -11,8 +11,8 @@ var Game = function () {
   this.levelIndex = 0;
   this.ui = null;
   this.shop = null;
-  // this.debugMode = location.href.indexOf('gonestatic') !== -1 || location.href.indexOf('carlmarkham') !== -1;
-  this.debugMode = false;
+  this.debugMode = location.href.indexOf('carlmarkham') !== -1;
+  // this.debugMode = false;
   this.cells = [];
   this.grid = new createjs.Container();
   createjs.MotionGuidePlugin.install();

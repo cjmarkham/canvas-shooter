@@ -4,8 +4,8 @@ var Preloader = function () {
   this.queue.installPlugin(createjs.Sound);
   this.queue.loadManifest([
     {
-      id: 'playerPlane',
-      src: 'images/sprites/player-plane.png',
+      id: 'playerPlane1',
+      src: 'images/sprites/playerPlane1.png',
     },
     {
       id: 'bullet1',
@@ -32,8 +32,8 @@ var Preloader = function () {
       src: 'images/sprites/enemyBullet2.png',
     },
     {
-      id: 'orb',
-      src: 'images/sprites/orb.png',
+      id: 'enemy1',
+      src: 'images/sprites/enemies/enemy1.png',
     },
     {
       id: 'explosion',
@@ -42,10 +42,6 @@ var Preloader = function () {
     {
       id: 'powerup1',
       src: 'images/sprites/powerup1.png',
-    },
-    {
-      id: 'orb',
-      src: 'images/sprites/orb.png',
     },
     {
       id: 'bomb',

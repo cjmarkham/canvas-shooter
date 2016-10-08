@@ -5,9 +5,10 @@ var Enemy = function (group, data) {
     this[keys[i]] = data[keys[i]];
   }
   this.curveStep = 0;
-  this.speed = 0;
   this.isSpawned = false;
   this.curve = null;
+  this.type = data.type;
+  this.speed = 0;
 
   if (game.debugMode) {
     this.line = null;
@@ -15,7 +16,8 @@ var Enemy = function (group, data) {
   }
 
   this.init = function () {
-    this.attributes = new OrbEnemy(data.x, data.y);
+    this.attributes = Enemies[this.type];
+    this.speed = this.attributes.speed;
 
     this.object = new createjs.Bitmap(preloader.get(this.attributes.sprite));
     this.group = group;
@@ -88,9 +90,7 @@ var Enemy = function (group, data) {
       path.push(targetX, targetY);
 
       this.curve = new Bezier(path);
-      this.speed = 8 / this.curve.length();
-    } else {
-      this.speed = 8;
+      this.speed = this.speed / this.curve.length();
     }
   };
 
@@ -136,14 +136,12 @@ var Enemy = function (group, data) {
       var angle = this.getLineAngle(this.object.x, this.object.y, step.x, step.y);
 
       if (this.curveStep <= 1) {
-        // this.object.rotation = angle;
-
         this.object.x = step.x;
         this.object.y = step.y;
       } else {
         var angleInRads = angle * Math.PI / 180;
-        this.object.vx = Math.cos(angleInRads) * 150;
-        this.object.vy = Math.sin(angleInRads) * 150;
+        this.object.vx = Math.cos(angleInRads) * this.speed;
+        this.object.vy = Math.sin(angleInRads) * this.speed;
         this.object.x += this.object.vx * 33 / 1000;
         this.object.y += this.object.vy * 33 / 1000;
       }
@@ -155,12 +153,19 @@ var Enemy = function (group, data) {
       }
     }
 
-    // calculate whether a shot can be made
-    // depending on the random shooting interval
-    this.shootingInterval -= 0.1;
-    if (this.shootingInterval <= 0) {
-      this.shoot();
-      this.shootingInterval = Math.random() * 40;
+    if (this.attributes.canShoot) {
+      if (this.shootingInterval <= 0) {
+        var random = Math.random() * (5 - 2) + 2;
+
+        // timer = 6
+        // random = 4
+        // spawn = 2
+
+        if (game.level.levelTimer == this.spawnTime + random) {
+          // this.shoot();
+          console.log('shoot');
+        }
+      }
     }
 
     this.destroyIfOffScreen();
@@ -180,9 +185,6 @@ var Enemy = function (group, data) {
   };
 
   this.shoot = function () {
-    if ( ! this.attributes.canShoot) {
-      return;
-    }
     new EnemyBullet(this, this.attributes.tracking);
   };
 

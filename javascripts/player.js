@@ -2,30 +2,11 @@ var Player = function () {
 
   MAX_LEVEL = 5;
 
-  this.width = 480 * 0.3;
-  this.height = 256 * 0.3;
-
-  var spritesheet = new createjs.SpriteSheet({
-    images: [preloader.get('playerPlane')],
-    frames: {
-      width: 480,
-      height: 256,
-      regX: 241,
-      regY: 128,
-      count: 5,
-    },
-    animations: {
-      up: [0, 0, 'normal', 1],
-      normal: 2,
-      down: [4, 4, 'normal', 1]
-    },
-  });
-  this.object = new createjs.Sprite(spritesheet, 'normal');
-
-  this.object.scaleX = 0.3;
-  this.object.scaleY = 0.3;
+  this.object = new createjs.Bitmap(preloader.get('playerPlane1'));
+  this.width = this.object.image.width;
+  this.height = this.object.image.height;
   this.object.x = this.width / 2;
-  this.object.y = ((game.height / 2) - (this.height / 2));
+  this.object.y = (game.height / 2) - (this.height / 2);
   this.lives = 3;
   this.inRespawnAnimation = false;
   this.moving = {
@@ -42,6 +23,7 @@ var Player = function () {
   this.respawning = false;
   this.starting = false;
   this.dead = false;
+  this.weapon = new Weapon();
   this.special = null;
 
   this.setLevel = function (level) {
@@ -69,16 +51,7 @@ var Player = function () {
   };
 
   this.shoot = function () {
-    // Check if we can fire
-    if (this.lastTimeFired < new Date().getTime() - 150) {
-      new PlayerBullet(this);
-
-      if (this.orb) {
-        this.orb.shoot();
-      }
-
-      this.lastTimeFired = new Date().getTime();
-    }
+    this.weapon.shoot();
   };
 
   this.shootSpecial = function () {
@@ -141,17 +114,15 @@ var Player = function () {
 
       if (this.moving.up) {
         this.object.y -= 10;
-        this.object.gotoAndPlay('up');
       } else if (this.moving.down) {
         this.object.y += 10;
-        this.object.gotoAndPlay('down');
       }
 
-      if (this.object.x <= this.width / 2) {
-        this.object.x = this.width / 2;
+      if (this.object.x <= 0) {
+        this.object.x = 0;
       }
 
-      if (this.object.x >= (game.width - this.width)) {
+      if (this.object.x >= game.width - this.width) {
         this.object.x = game.width - this.width;
       }
 
@@ -159,8 +130,8 @@ var Player = function () {
         this.object.y = (this.height / 2) + 100;
       }
 
-      if (this.object.y >= game.height - (this.height / 2)) {
-        this.object.y = game.height - (this.height / 2);
+      if (this.object.y >= game.height - this.height) {
+        this.object.y = game.height - this.height;
       }
 
       if (this.fireHeld) {

@@ -54,11 +54,13 @@ var Level = function (levelNumber) {
 
     this.levelTimerInterval = setInterval(function () {
       // used for enemy spawn timing
-      this.levelTimer += 0.5;
+      time = parseFloat(this.levelTimer, 10);
+      time += 0.1;
+      this.levelTimer = time.toFixed(1);
       if (game.debugMode) {
         $('#timer span').text(this.levelTimer);
       }
-    }.bind(this), 500);
+    }.bind(this), 100);
   };
 
   this.createEnemyGroups = function () {
@@ -99,7 +101,7 @@ var Level = function (levelNumber) {
       for (j = 0; j < enemies.length; ++j) {
         var enemy = enemies[j];
 
-        if (enemy.spawnTime === this.levelTimer) {
+        if (parseFloat(enemy.spawnTime, 10).toFixed(1) === this.levelTimer) {
           game.enemiesLayer.addChild(enemy);
           enemy.isSpawned = true;
           enemies.splice(j, 1);
@@ -239,7 +241,7 @@ var Level = function (levelNumber) {
         if (ndgmr.checkPixelCollision(bullet.object, enemy.object)) {
           new Explosion(enemy.object.x, enemy.object.y);
           enemy.kill();
-          // bullet.kill();
+          bullet.kill();
         }
       }
 
